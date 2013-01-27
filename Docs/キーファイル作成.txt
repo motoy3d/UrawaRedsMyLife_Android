@@ -1,0 +1,5 @@
+keytool -genkey -v -keyalg ＜鍵生成の暗号化方式＞ -keystore ＜証明書ファイル名＞ -alias ＜証明書別名＞ -validity ＜有効期限の日数＞
+
+keytool -genkey -v -keyalg RSA -keystore motoy3d.android.keystore -alias motoy3d -validity 11000
+
+password=eita0716

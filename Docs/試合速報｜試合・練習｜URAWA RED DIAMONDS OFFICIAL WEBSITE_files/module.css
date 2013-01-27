@@ -1,0 +1,518 @@
+@charset "utf-8";
+/*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+URAWA RED DIAMONDS OFFICIAL WEBSITE
+(c) URAWA REDS
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+	module
+		0. arrow
+		1. Navigation
+		2. Title
+		3. Table
+		4. List
+		5. Note
+		6. definition
+		7. Text
+		8. Tab
+		9. Img
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* ================================================================================ */
+/*      0.arrow     */  
+/* ================================================================================ */
+.linkPageTop {
+	background:url(images/arrow_linktop.gif) no-repeat 0 50%;
+	padding-left:19px;
+	color:#000000;
+}
+
+.linkArrowBasicA {
+	background:url(images/arrow_linkbasic.gif) no-repeat 0 50%;
+	padding-left:19px;
+	color:#000000;
+}
+
+.linkArrowBasicB {
+	background:url(images/arrow_linkbasicB.gif) no-repeat 0 50%;
+	padding-left:19px;
+	color:#000000;
+}
+
+/* ================================================================================ */
+/*      1.Navigation     */  
+/* ================================================================================ */
+
+/*		subMenuList
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.subMenuList {
+}
+
+.subMenuList h2 {
+	background:#000;
+	color:#FFF;
+	line-height:30px;
+	padding-left:15px;
+	border-bottom:5px solid #e10012;
+	font-size:108%;
+}
+
+.subMenuList ul {
+	border-top:1px solid #d8d8d8;
+	border-left:1px solid #d8d8d8;
+	border-right:1px solid #d8d8d8;
+}
+
+.subMenuList li {
+	background:#f1f0f0;
+	line-height:30px;
+	border-top:1px solid #FFFFFF;
+	border-bottom:1px solid #d8d8d8;
+}
+
+.subMenuList li a {
+	display:block;
+	text-decoration:none;
+	padding-left:15px;
+	zoom:1;
+}
+
+.subMenuList li a:hover {
+	font-weight:bold;
+	text-decoration:none;
+	background:#e10314 url(images/bg_submenulist_over.gif) repeat-x 0 0  ;
+	color:#FFF;
+	zoom:1;
+}
+
+/*		subMenuLinkList
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.subMenuLinkList {
+}
+
+.subMenuLinkList h2 {
+	line-height:30px;
+	padding-left:5px;
+	border-bottom:2px solid #000;
+	font-size:108%;
+	font-weight:bold;
+}
+
+.subMenuLinkList ul li {
+	line-height:30px;
+	border-bottom:1px solid #c6c6c6;
+}
+
+.subMenuLinkList ul li a {
+	display:block;
+	text-decoration:none;
+	zoom:1;
+	padding-left:5px;	
+}
+
+.subMenuLinkList ul li a:hover  {
+	font-weight:bold;
+	text-decoration:none;
+	background:#ffe1e3;
+}
+
+/*		subMenuNameList
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.subMenuNameList {
+}
+
+.subMenuNameList h2 {
+	line-height:30px;
+	padding-left:5px;
+	border-bottom:2px solid #000;
+	font-size:108%;
+	font-weight:bold;
+}
+
+.subMenuNameList ul li {
+	line-height:25px;
+	border-bottom:1px solid #c6c6c6;
+}
+
+.subMenuNameList ul li a {
+	display:block;
+	text-decoration:none;
+	zoom:1;
+	padding-left:10px;	
+}
+
+.subMenuNameList ul li a:hover  {
+	font-weight:bold;
+	text-decoration:none;
+	background:#ffe1e3;
+}
+
+/*		subMenuNameList
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+
+.bannerMainList {
+}
+
+.bannerMainList li {
+	line-height:0.5;
+	zoom:1;
+	margin:0;
+	margin-bottom:5px;
+}
+
+/* ================================================================================ */
+/*      2. Title   */  
+/* ================================================================================ */
+
+/*		mainContTitle
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.mainContTitleh2 {
+	background:url(images/bg_maincont_h2.gif) repeat 0 0;
+	line-height:40px;
+	padding-left:23px;
+	color:#FFF;
+	font-size:139%;
+}
+
+.mainContTitleh3 {
+	padding-left:15px;
+	border-left:12px solid #e10012;
+	line-height:30px;
+	font-weight:bold;
+	font-size:108%;
+}
+
+.mainContTitleh4 {
+	background:url(images/bg_maincont_h4.gif) repeat-x 0 bottom;
+	line-height:30px;	
+	font-weight:bold;
+	font-size:108%;
+}
+
+.mainContTitleUnvA {
+	background:url(images/bg_maincont_list1.jpg) repeat-x 0 0px;
+	padding-left:20px;
+	line-height:30px;
+	font-weight:bold;
+	font-size:108%;
+	color:#646464;
+	border-left:1px solid #ccc;
+	border-right:1px solid #ccc;
+}
+
+.mainContTitleUnvB {
+	background:#e10214;
+	line-height:2.5em;
+	padding-left:25px;
+	color:#FFFFFF;
+}
+
+.mainContTitleUnvC {
+	background:#f3a3a9;
+	line-height:2.5em;
+	padding-left:25px;
+}
+
+.mainContTitleUnvD {
+	background:#343434;
+	line-height:2.5em;
+	padding-left:25px;
+	color:#FFFFFF;
+}
+
+/* ================================================================================ */
+/*      3. Table   */  
+/* ================================================================================ */
+
+/*		mainContTblA
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.mainContTblA {
+	width:100%;
+}
+
+.mainContTblA td,
+.mainContTblA th  {
+	padding:1em;
+}
+
+.mainContTblA  .tbTtleTd {
+	background:#232323;
+	color:#FFFFFF;
+	font-size:108%;
+	font-weight:bold;
+}
+
+.mainContTblA  .tbTtleTh {
+	background:#c4c4c4 url(images/bg_content_tb1.gif) repeat 0 0;
+}
+
+/*		mainContTblB
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.mainContTblB {
+	width:100%;
+}
+
+.mainContTblB td,
+.mainContTblB th  {
+	padding:1em;
+}
+
+.mainContTblB .tbTtleThA {
+	background:#e10012;
+	color:#FFFFFF;
+}
+
+.mainContTblB  .tbTtleThB {
+	background:#000000;
+	color:#FFFFFF;
+}
+
+.picTableA {
+	overflow:hidden;
+}
+
+.picTableA dl {
+
+}
+
+.picTableA dt {
+	float:left;
+	width:100px;
+}
+
+.picTableA dd {
+	float:left;
+	padding-left:10px;
+	width:490px;
+}
+
+.picTableA table {
+	width:100%;
+}
+
+.picTableA table th {
+	background:#D0D0D0;
+	font-weight:bold;
+	padding:0.5em;
+	border-bottom:1px dashed #FFF;
+}
+
+.picTableA table td {
+	padding:0.5em;
+	background:#EBEBEB;
+}
+
+/* ================================================================================ */
+/*      4. List   */  
+/* ================================================================================ */
+
+/*		mainContList1
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.mainContList1 {
+	padding-top:1em;
+}
+
+.mainContList1 li {
+	padding-bottom:1em;
+}
+
+/*		mainContList2
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.mainContList2 {	
+	border-top:1px solid #c6c6c6;
+	border-left:1px solid #c6c6c6;
+	border-right:1px solid #c6c6c6;
+}
+
+.mainContList2 h3 {
+	margin:2px;
+}
+
+.mainContList2 ul {
+	border-top:1px solid #c6c6c6;;
+}
+
+.mainContList2  ul li {
+	padding:0.5em;
+	border-bottom:1px solid #c6c6c6;
+}
+
+/*		mainContList3
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.mainContList3 {
+	padding-top:0.5em;
+}
+
+.mainContList3 li {
+	padding-top:0.5em;
+	padding-left:1em;
+	padding-bottom:0.5em;
+}
+
+.mainContList3 .bgR {
+	background:#f9ced1;
+}
+/*		mainContList4
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+ul.mainContList4 li a{
+	padding:5px 0 0 13px;
+	background: url("images/allow.gif") no-repeat left center;
+	}	
+/*		mainContList5
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+ul.mainContList5 li{
+	padding-left:13px;
+	background: url("images/dot.gif") no-repeat left top;
+	}
+		
+/*		mainContList6
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+	ol.mainContList6 {padding-left:30px;}
+	ol.mainContList6 li{list-style-type: decimal;}
+	ol.mainContList6 li li{list-style-type: none;}
+	
+/*		mainContList7
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.mainContList7 li{
+	padding-top:0.5em;
+	padding-bottom:0.5em;
+	overflow:hidden;
+	border-bottom:1px solid #C6C6C6;
+}
+
+.mainContList7 li dl{
+}
+
+.mainContList7 li dt{
+	width:180px;
+	float:left;
+}
+
+.mainContList7 li dt span{
+	margin-right:1em;
+}
+
+.mainContList7 li dd {
+	width:410px;
+	padding-left:10px;
+	float:left;
+}
+
+/* ================================================================================ */
+/*      5. Note   */  
+/* ================================================================================ */
+
+/*		noteBlock1
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.noteBlock1 {
+	border: 1px solid #d7d7d7;
+	padding:2px;
+}
+
+.noteBlock1 .innerBlock {
+	background:#efefef;
+	padding:1em;
+}
+
+.noteBlock1 .innerBlock2 {
+	background:#efefef;
+	padding:5px;
+}
+
+/*		noteBlock1
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.noteBlock2 {
+	border: 1px solid #646464;
+	padding:2px;
+}
+
+.noteBlock2 p.innerBlock {
+	border: 1px solid #646464;
+	padding:1em;
+}
+
+/* ================================================================================ */
+/*      6. definition  */  
+/* ================================================================================ */
+
+/*		definition1
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+dl.dfnt1 dt{font-weight:bold; color:#333;}
+dl.dfnt1 dd{padding-bottom:5px; margin:0;}
+
+
+/* ================================================================================ */
+/*      7. Text   */  
+/* ================================================================================ */
+
+/*		contBasicTxt1
+-------------------------------------------------------------------------------------------------------------------------------------------*/
+.contBasicTxt1 {
+	overflow:hidden;
+}
+
+.contBasicTxt1 p {
+	padding-top:0.5em;
+	padding-bottom:0.5em;
+	overflow:hidden;
+}
+
+/* ================================================================================ */
+/*      8. Tab   */  
+/* ================================================================================ */
+
+.tabContentsA {
+}
+
+
+.tabContentsA  {
+	margin-left: 0;
+	padding-left: 0;
+	overflow: hidden;
+	border-bottom:2px solid #CCCCCC;
+}
+.tabContentsA li {
+	display:block;
+	float:left;	
+	margin-right:2px;
+	border:1px solid #999;
+	border-bottom:0;
+	background:#F7F7F7 url(images/bg_tab_a.gif) repeat-x 0 0;
+	height:25px;
+	line-height:25px;
+	padding:0 5px;
+	* html display:inline;
+	* html float:none;
+}
+.tabContentsA li a {
+	text-align: center;
+	text-decoration:none;
+	padding:0 5px;
+	color:#000;
+}
+.tabContentsA li:hover,
+.tabContentsA li.selected {
+	border-color: #333;
+	color:#FFF;
+	background: #E61929;
+}
+
+.tabContentsA li.selected a {
+	color:#FFF;
+}
+
+/* ================================================================================ */
+/*      9. Img   */  
+/* ================================================================================ */
+.articleImg img {
+	margin-bottom:5px;
+}
+
+.picFrame {
+	padding:1px;
+	border:1px solid #999;
+}
