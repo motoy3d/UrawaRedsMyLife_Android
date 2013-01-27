@@ -1,0 +1,73 @@
+@charset "utf-8";
+
+/*topSearch*/
+.topSearch .search_box{width:230px;}
+.topSearch .search_btn{width:40px;height:22px;}
+/*SD01*/
+/*topSearch*/
+.event li .left{width:60px;display:block;vertical-align:top;}
+.event li .rightTab .items{width:10px;display:block;vertical-align:top;}
+.event li .rightTab{width:542px;display:inline-block;vertical-align:top;}
+.event .left{width:75px;float:left;}
+.event .right{width:554px;float:left;}
+.event .right_in{width:534px;float:left;}
+.event .right_in li,.event .right li{ white-space:nowrap;}
+.event{vertical-align:top;line-height:30px;}
+/*SD02*/
+.h01_c li .close a{background-image:url(http://i.yimg.jp/images/sports/soccer_j/icon_common.png);background-repeat:no-repeat;background-position:0px -89px;padding-left:15px;}
+.h01_c li .open a{background-image:url(http://i.yimg.jp/images/sports/soccer_j/icon_common.png );background-repeat:no-repeat;background-position:0px -119px;padding-left:15px;}
+.event li{float:left;}
+/*SE01_a*/
+.eventFlame{width:470px;float:left;white-space:nowrap;}
+.eventFlame ul li{float:left;}
+.linkFlame{width:300px;float:left;}
+
+/*sa01-------------------------------------------------*/
+/*global-navi*/
+/* CSS Document */
+#global-navigation #other_list_top{background:url("http://i.yimg.jp/images/sports/css/top/bgneo2.png") no-repeat -9315px bottom;background-color:#000; margin-top:-1px; border-top:1px solid #111;}#global-navigation #other_list_top ul li{display:block;float:left;color:#ffffff;font-size:80%; height:2.2em;}#global-navigation #other_list_top ul li.h{border-left:0px}#global-navigation #other_list_top ul li.end{border-left:1px solid #414141;height:2.2em;border-right:0px;float:left}#global-navigation #other_list_top ul li a{display:block;width:auto;padding:0 10px; line-height:2.2em;color:#ffffff;text-decoration:none;white-space:nowrap;border-left:1px solid #414141;border-right:1px solid #1d1d1d}#global-navigation #other_list_top ul li a:hover{display:block;background:url("http://i.yimg.jp/images/sports/css/top/bgneo2.png") -9135px bottom;color:#ffd800;border-left:none;border-right:none;padding:0px 11px; line-height:2.2em;text-decoration:none}#global-navigation #other_list_top ul li.active{ display:block;float:left;padding:2px 10px;background:url("http://i.yimg.jp/images/sports/css/top/bgneo2.png") -9135px bottom;background-color:bottom;color:#ffd800;font-size:80%;border-right:none}#global-navigation #other_list_top ul li.active a{border-left:1px solid #ffffff;border-right:1px solid #ffffff}#global-navigation #other_list_top ul li.active a:hover{display:block;background:none;color:#000000;text-decoration:none}#global-navigation #other_list_top ul li#zubari{float:right;border:1px solid #515151}#global-navigation #other_list_top ul li#zubari span{display:block;background:url("http://i.yimg.jp/images/sports/css/top/bgneo2.png") no-repeat -8775px 0;white-space:nowrap}#global-navigation #other_list_top ul li#zubari a{display:block;background:url("http://i.yimg.jp/images/sports/css/top/bgneo2.png") no-repeat -8775px 0;border-left:none;border-right:none;padding:1px 11px 0}#global-navigation #other_list_top ul li#zubari a:hover{display:block;background:url("http://i.yimg.jp/images/sports/css/top/bgneo2.png") no-repeat -8775px -50px;padding:1px 11px 0;text-decoration:none}#global-navigation #other_list_top ul li#zubari.active{float:right;margin:1px 1px 0 0;padding:0 0 2px 0;_padding-bottom:0px;border:1px solid #f8f8f8}#global-navigation #other_list_top ul li#zubari.active span{display:block;_width:0;border:1px solid #bcbcbc;padding:0 10px;background:url("http://i.yimg.jp/images/sports/css/top/bgneo2.png") no-repeat -8955px 0;white-space:nowrap}
+#global-navigation #gn_top ul li.active_top {background:url("http://i.yimg.jp/images/sports/css/top/bgneo2.png") repeat scroll -9135px bottom transparent;border-right:medium none;color:#FFD800;display:block;padding:0 10px;line-height:2.2em;}
+/* --- fantasy ---*/
+#global-navigation .other_site{float:right !important;margin:1px 1px 0 0;height:1.7em !important;padding-bottom:2px;_padding-bottom:0px;/* --- IE hack ---*/margin-bottom:1px;border:1px solid #515151;}
+#global-navigation .other_site span{display:block;_width:0;/* --- IE hack ---*/height:1.7em !important;border:1px solid #0e0e0e;background:url(http://i.yimg.jp/images/sports/2008/common/globalnavi/gnt_fantasy_bg.gif);line-height:1.7em !important;white-space:nowrap;}
+#global-navigation .other_site a{height:1.7em !important;padding:0 10px !important;background:url(http://i.yimg.jp/images/sports/2008/common/globalnavi/gnt_fantasy_bg.gif);line-height:1.7em !important; border:none !important; width:5.5em !important; text-align:center; overflow:hidden;}
+#global-navigation .other_site a:hover{display:block;height:1.7em;background:url(http://i.yimg.jp/images/sports/2008/common/globalnavi/gnt_fantasy_bg.gif) 0 -50px !important; width:5.5em !important; overflow:hidden;}
+
+
+/*smallh01*/
+.half_box{ width:312px; _overflow:hidden;}
+.half_box .txt_list .list_end{ margin-bottom:0;}
+.half_box .h01_box,.half_box .h01_inner,#event_box .h01_box,#event_box .h01_inner{ background:url(http://i.yimg.jp/images/sports/top/bg_smallh01.png) no-repeat;}
+.half_box .h01_box{ background-position:-1208px 0;width:312px;}
+.half_box .h01_inner{ background-position:-1520px bottom;width:312px;}
+#event_box .h01_box{ background-position:0 0;width:604px;}
+#event_box .h01_inner{ background-position:-604px bottom;width:584px;}
+
+/*announce_box*/
+#announce_box li{ padding:5px;}
+#announce_box dt{ width:40px; margin-right:5px;}
+img{ vertical-align:bottom;}
+#announce_box dd{ width:243px;}
+.video_label{ background:#c6e1e8 url(http://i.yimg.jp/images/sports/top/icon_tv.png) no-repeat 5px center;padding:8px 10px 5px 22px; line-height:1.3; vertical-align:middle; display:inline-block; margin:0 5px 5px 0;}
+* html .pickup_list .txt_box .yjLS a{ text-decoration:none;}
+* html .pickup_list .txt_box .yjLS a:link{  border-bottom:1px solid #00e;}
+* html .pickup_list .txt_box .yjLS a:visited{  border-bottom:1px solid #909;}
+
+.pickup_list .yjLS .yjMS{ font-size:77%;}
+
+/*event_box*/
+.event_black{ border:3px solid #000;}
+#event_box .pickup_list{ padding:10px 10px 0 10px; width:auto;}
+#event_box .p02_a{ width:auto;}
+#event_box .pickup_llist{ width:292px;}
+#event_box .pickup_rlist{ width:290px;}
+#event_box .event_list{ background-color:#eee; padding:3px 0 3px 5px;}
+#event_box .event_list li{ float:left; margin-right:5px;}
+
+/*other*/
+.fs_list{ padding:6px 5px; letter-spacing:0;}
+.fs_list li{ white-space:nowrap; margin-bottom:3px;}
+.navi_link li{ white-space:nowrap;}
+.outside_link .f_gray03{ width:232px; text-align:right;}
+.js001 .ttl, .js002 .ttl{ overflow:hidden;}
+.more_black{ white-space:nowrap;}

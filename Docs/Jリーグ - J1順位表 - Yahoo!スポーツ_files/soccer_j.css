@@ -1,0 +1,362 @@
+@charset "utf-8";/* CSS Document */
+
+/*レーダーチャート*/
+.rader{background-image:url(http://i.yimg.jp/images/sports/soccer_j/raderBg.png);background-repeat:repeat;height:190px;width:612px;border:1px solid #c2c2c2;text-align:center;padding:10px;}
+.rader .home{background-position:0px -230px;display:inline-block;padding-left:30px;text-align:left;}
+.rader .away{background-position:0px -262px;display:inline-block;padding-left:30px;text-align:left;}
+/*hotzoon*/
+#hotzoon{border:1px solid #c2c2c2;}
+#hotzoon .item01{width:30%;border-right:1px solid #FFF;}
+#hotzoon .item02{width:40%;}
+#hotzoon .item03{width:30%;border-left:1px solid #FFF;}
+#hotzoon th{font-weight:bold;background-color:#d3e0e0;height:26px;text-align:center;}
+#hotzoon .team{letter-spacing:7px;font-weight:bold;}
+#hotzoon .high_low{background-image:url(http://i.yimg.jp/images/sports/soccer_j/high_low.png);background-repeat:no-repeat;height:24px;width:97px;text-indent:-9999px;display:block;float:right;}
+#hotzoon .hint{background-image:url(http://i.yimg.jp/images/common/helpicon.gif);background-repeat:no-repeat;padding-left:20px;display:block;line-height:14px;text-align:left;float:right;}
+
+/* ----------------------------
+画像読み込み
+-----------------------------*/
+#team_ranking .acl_icon,#team_ranking .acl2_icon,#team_ranking .up_icon,#team_ranking .change_icon,#team_ranking .down2_icon,#team_ranking .down_icon{background-image:url(http://i.yimg.jp/images/sports/soccer_j/sprite_icon.png);background-repeat:no-repeat;display:block;}
+.cancelBtn,.reportBtn,.deleteBtn{background-image:url(http://i.yimg.jp/images/sports/soccer_j/sprite_img.png);background-repeat:no-repeat;display:block;}
+.list_dotS li,.sort_asc,.sort_desc,.js001 .close_btn,.js001 .open_btn{background:url(http://i.yimg.jp/images/sports/soccer_j/icon_common.png) no-repeat;}
+.team_pop_off,.team_pop_on{background:url(http://i.yimg.jp/images/sports/soccer_j/bg_btn.png) no-repeat;}
+.rader .home,.rader .away,.icon_stamen{background-image:url(http://i.yimg.jp/images/sports/soccer_j/sprite_icon.png);background-repeat:no-repeat;}
+/* ----------------------------
+main
+-----------------------------*/
+.h01_box h2{ font-weight:bold;}
+/*c03a------------------------------------------------ */
+/*sub_navi*/
+#sub_navi li{float:left;}
+/*選手期待値*/
+#ExpectValue{width:100%;}
+#ExpectValue table{width:312px;}
+#ExpectValue table th{background-color:#d3e0e0;height:26px;border:1px solid #c2c2c2;padding-right:5px;padding-left:10px;}
+#ExpectValue table td{border:1px solid #c2c2c2;padding:10px;}
+#ExpectValue table td img{padding:1px;border:1px solid #c2c2c2;float:left;margin-right:10px;}
+#ExpectValue p{width:634px;display:inline-block;}
+/*時間帯別成績*/
+.TimeRecord table{width:100%;}
+.TimeRecord table th{background-color:#d3e0e0;height:26px;padding-right:5px;padding-left:10px;}
+.TimeRecord table th{background-color:#d3e0e0;height:26px;padding-right:8px;padding-left:8px;font-size:13px;}
+.TimeRecord th{background-color:#d3e0e0;height:26px;padding-right:8px;padding-left:8px;font-size:13px;}
+.TimeRecord table td{font-size:14px;height:26px;text-align:center;}
+/*c04a------------------------------------------------ */
+/*stratMem*/
+.stratMem .item01{width:12%;}
+.stratMem .item02{width:55%;}
+.stratMem .item03{width:18%;}
+.stratMem .item04{width:15%;}
+/*c04b------------------------------------------------ */
+/*jm008*/
+#TeamVs_btm table{width:100%;}
+#TeamVs_btm th{background-color:#eee;border-right:1px solid #c2c2c2;border-bottom:1px solid #c2c2c2;border-left:1px solid #c2c2c2;}
+#TeamVs_btm td{border-right:1px solid #c2c2c2;border-bottom:1px solid #c2c2c2;border-left:1px solid #c2c2c2;}
+#TeamVs_btm table .item01{width:44%;padding:5px;vertical-align:top;}
+#TeamVs_btm table .item02{width:12%;padding:5px;vertical-align:top;}
+/*gamePass*/
+#gamePass div{border:1px solid #c2c2c2;}
+#gamePass table{width:100%;}
+#gamePass th{background-color:#eee;border-bottom:1px solid #c2c2c2;}
+#gamePass .wLine{border:1px solid #fff;}
+#gamePass table .item01{width:44%;padding:5px;vertical-align:top;font-size:87.5%;}
+#gamePass table .item02{width:12%;padding:5px;vertical-align:middle;font-size:84%;}
+#main .Card{background-image:url(http://i.yimg.jp/images/sports/soccer/common/icon/yrcard.gif);background-repeat:no-repeat;padding-left:16px;background-position:left center;display:inline-block;}
+#main .YellowCard{background-image:url(http://i.yimg.jp/images/sports/soccer/common/icon/ycard.gif);background-repeat:no-repeat;padding-left:16px;background-position:left center;display:inline-block;}
+#main .RedCard{background-image:url(http://i.yimg.jp/images/sports/soccer/common/icon/rcard.gif);background-repeat:no-repeat;padding-left:16px;background-position:left center;display:inline-block;}
+#main .Goal{background-image:url(http://i.yimg.jp/images/sports/soccer/common/icon/ball.gif);background-repeat:no-repeat;padding-left:16px;background-position:left center;display:inline-block;}
+#main .Change{background-image:url(http://i.yimg.jp/images/sports/soccer/common/icon/chng.gif);background-repeat:no-repeat;padding-left:19px;background-position:left center;display:inline-block;}
+/*info*/
+#info table{width:100%;}
+#info th{background-color:#eee;padding:2px 8px;border:1px solid #c2c2c2;}
+#info .item01{width:12%;}
+#info .item02{width:20%;border:1px solid #c2c2c2;padding:0 5px;}
+#info .item03{width:3%;}
+#info .item04{height:5px;}
+/*d01a------------------------------------------------ */
+/*team_ranking*/
+#team_ranking table{width:100%;}
+#team_ranking th{background-color:#d3e0e0;text-align:center;padding:5px 0;}
+#team_ranking td{padding:5px 5px 5px 0;}
+#team_ranking .item01{width:12%;}
+#team_ranking .item03{width:7%;}
+#team_ranking .item04{width:9%;}
+#team_ranking .item05{width:5%;}
+#team_ranking .onMouse{background-color:#ced4e0;}
+#team_ranking .acl_icon{display:block;background-position:0px -102px;height:0px;width:35px;margin-top:0;margin:0 auto;padding-top:13px;overflow:hidden;}
+#team_ranking .acl2_icon{display:block;background-position:0px -125px;height:0px;width:51px;margin-top:0;margin:0 auto;padding-top:13px;overflow:hidden;}
+#team_ranking .up_icon{display:block;background-position:0px -148px;height:0px;width:29px;margin-top:0;margin:0 auto;padding-top:13px;overflow:hidden;}
+#team_ranking .change_icon{display:block;background-position:0px -171px;height:0px;width:50px;margin-top:0;margin:0 auto;padding-top:13px;overflow:hidden;}
+#team_ranking .down2_icon{display:block;background-position:0px -194px;height:0px;width:50px;margin-top:0;margin:0 auto;padding-top:13px;overflow:hidden;}
+#team_ranking .down_icon{display:block;background-position:0px -217px;height:0px;width:28px;margin-top:0;margin:0 auto;padding-top:13px;overflow:hidden;}
+/*f01------------------------------------------------ */
+/*personal_record*/
+#personal_record table{width:100%;line-height:15px;}
+#personal_record th{background-color:#d3e0e0;text-align:center;padding:5px 0;}
+#personal_record td{padding:5px;vertical-align:baseline;}
+#personal_record .item01{width:5%;}
+#personal_record .item02{width:20%;}
+#personal_record .item03{width:8%;}
+#personal_record .item04{width:10%;}
+#personal_record .sort_th{background-color:#bebebe;}
+#personal_record .sort_td{background-color:#dbdbdb;}
+#personal_record .onMouse{background-color:#ced4e0;}
+/*g01------------------------------------------------ */
+/*team_data*/
+#teamData ul{width:50%;float:left;}
+#teamData ul li{float:left;white-space:nowrap;}
+/*m01------------------------------------------------ */
+#outline table{width:100%;}
+#outline th{background-color:#eee;border:1px solid #c2c2c2;padding:5px 10px;}
+#outline td{border:1px solid #c2c2c2;padding:5px 10px;}
+#outline .item01{width:17%;}
+/*e01------------------------------------------------ */
+#vsRecord table{width:100%;}
+#vsRecord th{background-color:#d3e0e0;text-align:center;border:1px solid #c2c2c2;padding:5px;}
+#vsRecord td{text-align:center;border-right:1px solid #c2c2c2;}
+#vsRecord .btmLine{border-bottom:1px solid #c2c2c2;}
+#vsRecord .onMouse{background-color:#ced4e0;}
+/*r02------------------------------------------------ */
+.item select{width:140px;}
+.item textarea{width:463px;height:115px;}
+.main_f{width:463px;margin:0px auto;}
+.cancelBtn{height:0px;width:192px;float:left;padding-top:38px;overflow:hidden;}
+.reportBtn{height:0px;width:192px;padding-top:38px;overflow:hidden;float:left;background-position:-197px 0px;}
+.deleteBtn{height:0px;width:192px;padding-top:38px;overflow:hidden;float:left;background-position:0px -88px;}
+.btmBtn{text-align:center;width:414px;}
+.btmBtn a{cursor:hand;text-decoration:none;}
+/*d01b------------------------------------------------ */
+.d01_alert{font-weight:bold;text-align:center;padding-top:152px;padding-bottom:240px;}
+
+/*o01b------------------------------------------------ */
+.o01_alert{font-weight:bold;text-align:center;padding-top:160px;padding-bottom:240px;}
+
+/* ----------------------------
+sub
+-----------------------------*/
+/*c03a------------------------------------------------ */
+/*c04a------------------------------------------------ */
+/*comment*/
+.js001 .close_btn{padding-left:17px;background-position:0px -90px;}
+.js001 .open_btn{padding-left:17px;background-position:0px -120px;}
+.js001 .middleArea{background-color:#dcdcdc;border-top-width:1px;border-bottom-width:1px;border-top-style:solid;border-bottom-style:solid;border-top-color:#c2c2c2;border-bottom-color:#c2c2c2;height:26px;line-height:25px;}
+.js001 textarea{border:1px solid #a2a2a2;margin:0;width:273px;height:54px;clear:both;}
+body:first-of-type .js001 textarea{max-width:277px;max-height:58px;width:277px;height:58px;}/*for Safari4*/
+.js001 textarea, x:-moz-broken, x:last-of-type{max-width:279px !important;max-height:60px !important;}/*for Firefox3.5*/
+.js001 input{vertical-align:middle;}
+/*f01------------------------------------------------ */
+.syllabary li{float:left;}
+
+/*sanaka----------------------------------------------------------------*/
+.navi_link li a strong,#sub_navi li a strong{color:#333;text-decoration:underline;}
+.pr30p{padding-right:30px;}
+.bt_white{border-top:1px solid #fff;}
+/*tr td.onMouse{border-right:1px solid #fff;}
+.bg_gray td.onMouse{border-right:1px solid #eee;}
+.onMouse td.onMouse{border-right:1px solid #ced4e0;}*/
+.txt_pink{color:#C36;}
+.ml10p{margin-left:10px;margin-right:10px;}
+.pb3p{padding-bottom:3px;}
+.js001 input.search_btn{text-align:center;}
+* html .js001 input.search_btn{height:1.65em;overflow:hidden;}
+*:first-child+html .js001 input.search_btn{height:1.65em;overflow:hidden;}
+/*h01_c*/
+.h01_c p{padding:3px 0 2px 0;}
+/*h02_f*/
+.h02_f{padding-bottom:3px;border-bottom:1px solid #4d4d4d;}
+.h02_box span.yjS{font-weight:normal;}
+/*asc・desc*/
+.sort_asc,.sort_desc{padding-left:16px;}
+.sort_asc{background-position:left -149px;}
+.sort_desc{background-position:left -179px;}
+.ttl{line-height:24px;}
+#pos-lrec dt{color:#000;background-color:#eee;}
+.navi_link li{float:left;padding:0.3em 0;}
+.h01_g .navi_link{padding:0 10px;background-color:#dedede;width:614px;color:#000;}
+.icon_photo,.icon_new{background:url(http://i.yimg.jp/images/sports/soccer_j/photoNew_45x15.gif) no-repeat;cursor:default;width:0;height:0;overflow:hidden;display:inline-block;margin:0 2px;vertical-align:middle;}
+.icon_photo{background-position:0 0;padding-right:18px;padding-top:17px;}
+.icon_new{background-position:-15px 3px;padding-right:31px;}
+
+/*mainpage=======================================================*/
+/*paragraph_tbl*/
+.paragraph_tbl table{width:100%;}
+.paragraph_tbl .item01{width:12%;}
+.paragraph_tbl .item02{width:14%;}
+.paragraph_tbl .item03{width:16%;}
+.paragraph_tbl .item04{width:14%;}
+.paragraph_tbl .item05{width:30%;}
+.paragraph_tbl .item06{width:14%;}
+.paragraph_tbl .item07{width:12%;}
+.paragraph_tbl .item08{width:10%;}
+.paragraph_tbl .item09{width:16%;}
+.paragraph_tbl .item10{width:10%;}
+.paragraph_tbl .item11{width:28%;}
+.paragraph_tbl .item12{width:12%;}
+.paragraph_tbl th{height:26px;background-color:#D3E0E0;}
+.paragraph_tbl td{padding:8px 0;}
+.paragraph_tbl td img{vertical-align:middle;}
+/*program_tbl*/
+#program_tbl table{width:100%;}
+#program_tbl .item01{width:12%;}
+#program_tbl .item02{width:12%;}
+#program_tbl .item03{width:10%;}
+#program_tbl .item04{width:16%;}
+#program_tbl .item05{width:10%;}
+#program_tbl .item06{width:28%;}
+#program_tbl .item07{width:12%;}
+#program_tbl th{height:26px;background-color:#D3E0E0;}
+#program_tbl td{padding:8px 0;}
+/*hoperank_tbl*/
+.hoperank_tbl table,.hoperank_tbl02 table{width:100%;}
+.hoperank_tbl th{height:26px;width:33%;background-color:#D3E0E0;}
+.hoperank_tbl td{padding:5px 0;}
+.hoperank_tbl td.txt_r{padding-right:69px;}
+.hoperank_tbl02 th{height:26px;background-color:#D3E0E0;}
+.hoperank_tbl02 td{padding-top:4px;padding-bottom:4px;}
+.hoperank_tbl02 .player_tbl td{padding-top:10px;padding-bottom:10px;}
+.hoperank_tbl02 .player_tbl .txt_l{padding-left:30px;}
+.hoperank_tbl02 .item01{width:6%;}
+.hoperank_tbl02 .item02{width:8%;}
+.hoperank_tbl02 .item03{width:33%;}
+.hoperank_tbl02 .item04{width:25%;}
+.hoperank_tbl02 .item05{width:25%;}
+.hoperank_tbl02 .item06{width:16%;}
+.hoperank_tbl02 .item07{width:15%;}
+.hoperank_tbl02 .item08{width:18%;}
+
+/*rank*/
+.rank_up,.rank_stay,.rank_down{display:inline-block;width:15px;height:15px;}
+.rank_up{color:#ffa200;}
+.rank_stay{color:#8e8e8e;}
+.rank_down{color:#5b63ff;}
+.hoperank_search{padding:5px 10px 4px 10px;}
+.hoperank_search select{width:86px;margin-right:20px;}
+.hoperank_tbl02 img{vertical-align:middle;}
+/*#rank_tbl01*/
+.rank_tbl01 table{width:100%;}
+.rank_tbl01 th{padding:0 5px;height:26px;white-space:nowrap;background-color:#D3E0E0;}
+.rank_tbl01 .wide_item{width:36%;}
+/*sort*/
+.sort_th{background-color: #bebebe;}
+.sort_td{background-color: #dbdbdb;}
+/*allplayer_tbl*/
+#search_tbl table{width:100%;}
+#search_tbl th{white-space:nowrap;padding:0 3px;}
+#allplayer_tbl th,#search_tbl th{border-left:1px solid #fff;border-top:1px solid #fff;height:23px;}
+#allplayer_tbl .onMouse,#search_tbl .onMouse{ background-color:#CED4E0;}
+#allplayer_tbl .item01{width:8%;}
+#allplayer_tbl .item02{width:8%;}
+#allplayer_tbl .item03{width:21%;}
+#allplayer_tbl .item04{width:12%;}
+#allplayer_tbl .item05{width:8%;}
+#allplayer_tbl .item06{width:12%;}
+#allplayer_tbl .item07{width:16%;}
+#allplayer_tbl .item08{width:9%;}
+#allplayer_tbl .item09{width:6%;}
+#allplayer_tbl th{background-color:#D3E0E0;}
+#allplayer_tbl td{padding:5px 3px;}
+/*serach_tbl*/
+#search_tbl .item01{width:7%;}
+#search_tbl .item02{width:5%;}
+#search_tbl .item03{width:24%;}
+#search_tbl .item04{width:11%;}
+#search_tbl .item05{width:11%;}
+#search_tbl .item06{width:7%;}
+#search_tbl .item07{width:11%;}
+#search_tbl .item08{width:7%;}
+#search_tbl .item09{width:9%;}
+#search_tbl .item10{width:8%;}
+#search_tbl th{background-color:#D3E0E0;}
+#search_tbl td{padding:5px 3px;}
+/*txt_list*/
+.txt_list .list_end{margin-bottom:0;}
+/*sub_navi*/
+.sub_navi,.sub_navi ul{line-height:25px;}
+.sub_navi li{float:left;}
+
+/*hope_btn_box02*/
+.hope_btn_box02{background-position:-340px 0;width:215px;height:60px;}
+.hope_btn_box02 .hope_btn_ex{width:155px;padding-top:5px;}
+.hope_btn_box02 .hope_btn_on,.hope_btn_box02 .hope_btn_off{width:60px;height:60px;}
+.hope_btn_box02 .hope_btn_on a,.hope_btn_box02 .hope_btn_off span,.hope_btn_box02 .hope_btn_out span{padding-top:60px;padding-left:60px;overflow:hidden;width:0;height:0;display:inline-block;}
+.hope_btn_box02 .hope_btn_on a{background-position:-60px 0;}
+.hope_btn_box02 .hope_btn_on a:hover{background-position:-60px -65px;}
+.hope_btn_box02 .hope_btn_off span{background-position:-60px -131px;}
+.hope_btn_box02 .hope_btn_out span{background-position:-60px -200px;}
+/*hope_list*/
+.hope_list li{margin-right:8px;float:left;width:119px;}
+.hope_list .list_end{margin-right:0;}
+/*search_box*/
+.search_box{width:230px;vertical-align:middle;}
+/*team-popup*/
+.team_pop_off,.team_pop_on{padding-top:12px;height:0;overflow:hidden;display:inline-block;vertical-align:middle;width:1px; padding-left:11px; margin-left:6px; _display:inline;_zoom:1;_padding-top:20px}
+.team_pop_off, .team_pop_on{ width:1px; padding-left:11px; margin-left:3px;}
+.sub_navi .team_pop_off,.sub_navi .team_pop_on{_padding-top:23px;}
+.team_pop_on{background-position:0 -270px;_background-position:0 -266px;}
+.team_pop_off{background-position:0 -290px;_background-position:0 -286px;}
+.sub_navi .team_pop_on{_background-position:0 -266px;}
+.sub_navi .team_pop_off{_background-position:0 -286px;}
+/*blog_list*/
+.blog_list{width:312px;}
+.blog_list h4{line-height:28px;padding:0 5px;font-weight:bold;}
+.blog_list li{margin-bottom:15px;}
+.blog_list .list_end{margin-bottom:0;}
+
+/*subpage=======================================================*/
+.js002{border:1px solid #d6d6d6;}
+.js002 .ttl{height:22px;padding:1px;background-color:#1d1d1d;}
+.js002 .ttl h3{border:1px solid #4a4a4a;height:20px;color:#fff;font-weight:bold;padding:0 3px;line-height:20px;}
+/*paragraph_list*/
+#paragraph_list ul{border-top:1px solid #c2c2c2;border-left:1px solid #c2c2c2;width:629px;}
+#paragraph_list li{white-space:nowrap;float:left;width:36px;border-right:1px solid #c2c2c2;text-align:center;line-height:24px;border-bottom:1px solid #c2c2c2;}
+/*sub_pictlist*/
+.js001 h4.bg_gray{line-height:23px;padding:0 10px;}
+/*list_dotS*/
+.list_dotS li{background-position:0 -150px;padding-left:6px;}
+.bbs_list li{float:left;white-space:nowrap;margin-right:9px;}
+/*profile_tbl*/
+#profile_tbl th{ text-align:left;}
+#profile_tbl td{padding-bottom:4px;height:24px;}
+#profile_tbl .profile_name{font-size:137%;}
+#profile_tbl table{width:100%;}
+.profile_ex{width:64.5%;height:59px;}
+.profile_pict{width:35.5%;padding-left:10px;}
+#profile_tbl .item01{width:15.5%;}
+#profile_tbl .item02{width:49%;}
+/*record_tbl*/
+#record_tbl table{border-bottom:1px solid #c2c2c2;border-left:1px solid #c2c2c2;}
+#record_tbl th{background-color:#D3E0E0;}
+#record_tbl table.f_left{width:504px;}
+#record_tbl table.f_right{width:120px;}
+#record_tbl th,#record_tbl td{text-align:center;border-top:1px solid #c2c2c2;border-right:1px solid #c2c2c2;}
+#record_tbl .item{width:14%;}
+#record_tbl .seazon_paragraph{width:100%;}
+#record_tbl .seazon_paragraph{border:1px solid #c2c2c2;}
+#record_tbl .seazon_paragraph th{border-bottom:1px solid #c2c2c2;background-color:#D3E0E0;}
+#record_tbl thead th,#record_tbl .seazon_paragraph thead th{ background-color:#eee;}
+#record_tbl .seazon_paragraph td{border:none;}
+.seazon_paragraph .tbl_title div{position:relative;}
+.seazon_paragraph .tbl_title div p{position:absolute;top:0;right:10px;}
+.icon_stamen{ background-position:0 -302px; padding-top:12px; padding-left:12px; height:0; width:0; overflow:hidden; vertical-align:middle; display:inline-block;}
+/*hoperank_link*/
+.hoperank_link{background-color:#eee;padding:6px 0;border:1px solid #d6d6d6;width:453px;margin:0 auto;}
+.hoperank_link li{line-height:1;padding:0 20px;float:left;}
+.hoperank_link .list_border{border-right:1px solid #d6d6d6;}
+
+
+/*popup*/
+.popup_off{ display:none;}
+.popup_on{ display:block;}
+#sub_navi #popup_teamlist{top:1.4em;right:13px; font-size:108%;}
+.navi_link #popup_teamlist{top:1.8em;right:13px;}
+#popup_teamlist{ border:4px solid #c2c2c2;width:300px; position:absolute; z-index:9999; background-color:#fff; padding:10px 0px 5px 0;}
+#popup_teamlist li{ float:left; width:130px; margin-bottom:5px;padding:0 10px;}
+.team_pop{ position:relative;}
+
+/*silverLight*/
+.nosl_box{ border:1px solid #C2C2C2; padding:20px 80px; line-height:1.5; margin-bottom:20px;}
+.errsl_box{ border:1px solid #C2C2C2; padding:35px 80px; line-height:1.5; margin-bottom:20px;}
+.winsl_box{ border:1px solid #C2C2C2; padding:35px 34px; line-height:1.5; margin-bottom:20px;}
+.sllink_list{ text-align:center;}
+.sllink_list li{ display:inline; margin:0 10px;}
