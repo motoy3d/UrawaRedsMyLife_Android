@@ -181,11 +181,11 @@ function createNewsRow(item) {
             Ti.API.debug('画像＝＝＝＝＝' + imgUrl + "  >  " + item.title);
             // アイコン等はgifが多いのでスキップ
             if(!util.isUnnecessaryImage(imgUrl)) {
-                var imgLabel = Ti.UI.createImageView(style.news.imgView);
+ /*               var imgLabel = Ti.UI.createImageView(style.news.imgView);
                 imgLabel.image = imgUrl;
                 row.add(imgLabel);
                 hasImage = true;
-            }
+*/            }
         }
     }
 	// タイトルラベル

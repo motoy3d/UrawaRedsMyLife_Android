@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0.0
+apiversion: 2
+description: Ignore StrictMode for Android SDK 3+.
+author: Motoi Kataoka
+license: Free
+copyright: Motoi Kataoka 2013
+
+
+# these should not be edited
+name: androidignorestrictmode
+moduleid: motoy3d.android.ignore.strictmode
+guid: 68677a1f-69b2-44b7-be52-e320af2d99d0
+platform: android
+minsdk: 2.1.4.GA

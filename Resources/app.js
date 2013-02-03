@@ -12,15 +12,20 @@
 
 // This is a single context application with mutliple windows in a stack
 (function() {
+    //determine platform and form factor and render approproate components
+    var osname = Ti.Platform.osname,
+        version = Ti.Platform.version,
+        height = Ti.Platform.displayCaps.platformHeight,
+        width = Ti.Platform.displayCaps.platformWidth;
+    Ti.API.info('★★Android API_LEVEL = ' + Ti.Platform.Android.API_LEVEL);
+if(Ti.Platform.Android.API_LEVEL > 9) {
+    disablePolicy();
+}
+
 	Ti.include('util/analytics.js');
 	startAnalytics();
 	initDB();
 	
-	//determine platform and form factor and render approproate components
-	var osname = Ti.Platform.osname,
-		version = Ti.Platform.version,
-		height = Ti.Platform.displayCaps.platformHeight,
-		width = Ti.Platform.displayCaps.platformWidth;
 	
 	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
 	//yourself what you consider a tablet form factor for android
@@ -44,6 +49,7 @@
 		if ( ( new Date() ).getTime() >= startTime + waitMilliSeconds ) break;
 	}
 //    tabGroup.open({transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT});
+disablePolicy();
     tabGroup.open();
 
 })();
@@ -87,4 +93,13 @@ function startAnalytics() {
 	    }
 	}
 	analytics.start(10);	//10秒に1回データ送信
+}
+
+function disablePolicy() {
+    // 自前モジュールによりStrictModeを回避
+    var androidignorestrictmode = require('motoy3d.android.ignore.strictmode');
+    Ti.API.info("自前モジュール => " + androidignorestrictmode);
+    var result = androidignorestrictmode.disablePolicy();
+    Ti.API.info('結果： ' + result);   
+    Ti.API.info('スレッドポリシー：' + androidignorestrictmode.threadPolicy); 
 }

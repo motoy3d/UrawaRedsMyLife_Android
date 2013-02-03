@@ -25,7 +25,12 @@ function WebWindow(webData) {
 	var webView = Ti.UI.createWebView({
 	    width: Ti.UI.FILL
 	    ,top: 30
+        ,bottom: 50
 	});
+
+    //TODO
+    webData.content = null;
+
     Ti.API.info('--------------3');
 	Ti.API.info("##### webData.content=[" + webData.content + "]" + ", webData.link=[" + webData.link + "]");
 	if(webData.content && 
@@ -61,6 +66,121 @@ function WebWindow(webData) {
 		self.add(webView);	
         Ti.API.info("----------- 9");
 	}
+
+
+    //ツールバー
+    var back = Ti.UI.createButton({
+        image: "/images/arrow_left_grey.png"
+        ,backgroundColor: 'transparent'
+        ,enabled: false
+        // ,width: 40
+        ,height: 40
+        ,top: 5
+        ,right: 95
+    });
+    back.addEventListener("click", function(e){
+        webView.goBack();
+    });
+    var forward = Ti.UI.createButton({
+        image: "/images/arrow_right_grey.png"
+        ,backgroundColor: 'transparent'
+        ,enabled: false
+        // ,width: 40
+        ,height: 40
+        ,top: 5
+        ,right: 10
+    });
+    forward.addEventListener("click", function(e){
+        webView.goForward();
+    });
+    var twitter = Ti.UI.createButton({
+        image: "/images/twitter_icon.png"
+        ,enabled: false
+    });
+    var facebook = Ti.UI.createButton({
+        image: "/images/facebook_icon_grey.png"
+        ,enabled: false
+        ,backgroundColor: 'transparent'
+        // ,width: 40
+        ,height: 40
+        ,top: 5
+        ,right: 180
+    });
+    // WebViewロード時、戻るボタン、次へボタンの有効化、無効化
+    webView.addEventListener('load', function(e) {
+        Ti.API.info('load★ ' + e.url);
+        back.setEnabled(webView.canGoBack());
+        back.image = back.enabled? "/images/arrow_left.png" : "/images/arrow_left_grey.png";
+        forward.setEnabled(webView.canGoForward());
+        forward.image = forward.enabled? "/images/arrow_right.png" : "/images/arrow_right_grey.png";
+        facebook.setEnabled(webView.url.indexOf("facebook.com") == -1);
+        facebook.image = facebook.enabled? "/images/facebook_icon.png" : "/images/facebook_icon_grey.png";
+    });
+
+    // facebookボタン
+    facebook.addEventListener("click", function(e){
+        if(!Ti.Facebook.loggedIn) {
+            // ログイン済みでない場合はログインする
+            Ti.Facebook.appid = '130375583795842';
+            Ti.Facebook.permissions = ['publish_stream', 'read_stream']; // facebook開発者ページで設定
+            Ti.Facebook.addEventListener('login', function(e) {
+                if (e.success) {
+                    facebookShare();    //ログイン成功後シェア
+                } else if (e.error) {
+                    Ti.API.error('-----facebookログインエラー');
+                } else if (e.cancelled) {
+                    Ti.API.info('-----facebookログインキャンセル');
+                }
+            });
+            Ti.Facebook.authorize();    //認証実行
+        } else {
+            facebookShare();
+        }
+    });
+    var flexSpace = Ti.UI.createView({
+        width: 100
+    });
+    var toolbar = Ti.UI.createView({
+        backgroundColor: 'red'
+        ,width: Ti.UI.FILL
+        ,height: 50
+        ,bottom: 0
+    });
+//    toolbar.add(flexSpace);
+    toolbar.add(facebook);
+    toolbar.add(back);
+    toolbar.add(forward);
+    self.add(toolbar);
+//    self.setToolbar([flexSpace, /*twitter,*/ flexSpace, facebook, flexSpace, back, flexSpace, forward]);
+    
+    /**
+     * facebookでシェアする
+     */ 
+    function facebookShare() {
+        var image = webData.image;
+        Ti.API.info('画像＝＝＝' + image);
+        var data = {
+            link : webView.url
+//                ,name : webData.title
+//                ,message :  "message"
+//                ,caption : content
+//                ,picture : image
+            ,locale : "ja_JP"
+//                description : "ユーザの投稿文"
+        };
+        Ti.App.Analytics.trackPageview('/fbShareDialog');   //ダイアログを開く
+        //投稿ダイアログを表示
+        Ti.Facebook.dialog(
+            "feed", 
+            data, 
+            function(r){
+                if(r.success) {
+                    Ti.App.Analytics.trackPageview('/fbShare'); //投稿成功
+                }
+            }
+        );
+    }
+
 	return self;
 };
 module.exports = WebWindow;
