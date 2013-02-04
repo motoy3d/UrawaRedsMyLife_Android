@@ -47,7 +47,6 @@ function WebWindow(webData) {
 		self.add(webView);
         Ti.API.info('--------------5');
 	} else {
-	    webView.setBackgroundColor('black');
         var indWin = customIndicator.create();
         var loaded = false;
         self.addEventListener('open',function(e){
@@ -55,7 +54,11 @@ function WebWindow(webData) {
                 if(!loaded) {
                     indWin.open({modal: true});
                 }
-            }, 200);
+            }, 100);
+            //TODO ３秒で消す？
+            // setTimeout(function() {
+                // indWin.close();
+            // }, 3000);
         });
 		webView.addEventListener("load", function(e) {
 		    loaded = true;
@@ -141,12 +144,14 @@ function WebWindow(webData) {
         width: 100
     });
     var toolbar = Ti.UI.createView({
-        backgroundColor: 'red'
+        // グラデーションはエラーになるのでイメージで対応
+        // https://jira.appcelerator.org/browse/TIMOB-9819
+        backgroundImage: "/images/toolbarBackground.png"
+        ,backgroundRepeat: true
         ,width: Ti.UI.FILL
         ,height: 50
         ,bottom: 0
     });
-//    toolbar.add(flexSpace);
     toolbar.add(facebook);
     toolbar.add(back);
     toolbar.add(forward);

@@ -16,11 +16,12 @@ exports.style = {
 			message: '読み込み中...'			
 		},
         titleBar : {
-            width: Ti.UI.FILL,
-            height: 30,
-            backgroundColor: 'red',
-            color: 'white',
-            top: 0          
+            width: Ti.UI.FILL
+            ,height: 30
+            ,backgroundImage: "/images/toolbarBackground.png"
+            ,backgroundRepeat: true
+            ,color: 'white'
+            ,top: 0          
         }
 	},
 	news : {
