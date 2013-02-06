@@ -28,25 +28,21 @@ function WebWindow(webData) {
 	    ,top: 30
         ,bottom: 46
 	});
-
-    //TODO
-    webData.content = null;
-
-    Ti.API.info('--------------3');
+    var simpleDispModeProp = Ti.App.Properties.getBool("simpleDispMode");
 	Ti.API.info("##### webData.content=[" + webData.content + "]" + ", webData.link=[" + webData.link + "]");
-	if(webData.content && 
+	
+	if(simpleDispModeProp &&
+	    webData.content && 
 		(webData.content != "" && 
 		 webData.content.indexOf('<img src="http://feeds.feedburner.com') == -1 
 		 )
 	) {
-		Ti.API.info("----------- 4");
 		var content = 
 			webData.content + "<br/><br/>" 
 			+ "<a href=\"" + webData.link + "\">サイトを開く</a>"
             ;
 		webView.html = content;
 		self.add(webView);
-        Ti.API.info('--------------5');
 	} else {
         var indWin = customIndicator.create();
         var loaded = false;
@@ -65,21 +61,17 @@ function WebWindow(webData) {
 		    loaded = true;
             indWin.close();
 		});
-        Ti.API.info("----------- 8");
 		webView.setUrl(webData.link);
 		self.add(webView);	
         Ti.API.info("----------- 9");
 	}
-
 
     //ツールバー
     var back = Ti.UI.createButton({
         image: "/images/arrow_left_grey.png"
         ,backgroundColor: 'transparent'
         ,backgroundSelectedImage: "/images/arrow_left_grow.png"
-//        ,backgroundLeftCap: 32
         ,enabled: false
-        // ,width: 40
         ,height: 36
         ,top: 5
         ,right: 95
@@ -116,12 +108,14 @@ function WebWindow(webData) {
     });
     // WebViewロード時、戻るボタン、次へボタンの有効化、無効化
     webView.addEventListener('load', function(e) {
-        title = webView.evalJS("document.title");
-        shortTitle = title;
-        Ti.API.info('load★ ' + title + "  " + e.url);
-        if(title && title.length > 21) {
-            shortTitle = title.substring(0, 21) + "...";
+        if(e.url.indexOf("http") == 0) {
+            title = webView.evalJS("document.title");
+            shortTitle = title;
+            if(title && title.length > 21) {
+                shortTitle = title.substring(0, 21) + "...";
+            }
         }
+        Ti.API.info('load★ title=' + title + "  e.url=" + e.url);
         titleBar.text = shortTitle;
 
         back.setEnabled(webView.canGoBack());
@@ -170,10 +164,15 @@ function WebWindow(webData) {
      * facebookでシェアする
      */ 
     function facebookShare() {
-        var image = webData.image;
-        Ti.API.info('画像＝＝＝' + image);
+        // var image = webData.image;
+        Ti.API.info('webView.url＝＝＝' + webView.url);
+        var link = webData.link; //簡易表示の場合はwebData.link
+        if(webView.url.indexOf("http") == 0) {
+            link = webView.url;
+        }
+        Ti.API.info('facebookシェア link=' + link);
         var data = {
-            link : webView.url
+            link : link
 //            ,name :  title
 //                ,message :  "message"
 //            ,caption : ""

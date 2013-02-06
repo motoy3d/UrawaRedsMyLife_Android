@@ -15,11 +15,12 @@ function NewsWindow(tabGroup) {
     
 	var News = require("/model/News");
 	var WebWindow = require("/ui/handheld/WebWindow");
+    var ConfigWindow = require("/ui/handheld/ConfigWindow");
 	var util = require("/util/util").util;
 	var style = require("/util/style").style;
     var customIndicator = require("/util/CustomIndicator").customIndicator;
 	var news = new News();
-    
+
     var indWin = customIndicator.create();
 
     // ウィンドウ
@@ -27,26 +28,38 @@ function NewsWindow(tabGroup) {
 		title: L('news')
 		,backgroundColor: 'black'
 	});
-    // インジケータ
-//    var indicator = Ti.UI.createActivityIndicator({message : style.common.loadingMsg});
-//    self.add(indicator);
     //TODO 更新ボタン---------------------------------------
     var refreshBtn = Ti.UI.createButton({
         backgroundImage: "/images/refresh.png",
         backgroundSelectedImage: "/images/refresh_pressed.png",
         width: 48,
         height: 48,
-        top : 5,
-        right : 5
+        top : 2,
+        right : 5 + 48 + 10
     });
     refreshBtn.addEventListener('click', function() {
         indWin.open({modal: true});
 //        indicator.show();
         setTimeout(function() {
             beginLoadingNewer();
-        },200);
+        },100);
     });
     self.add(refreshBtn);
+    
+    // 設定ボタン---------------------------------------
+    var confBtn = Ti.UI.createButton({
+        backgroundImage: "/images/gear.png",
+        backgroundSelectedImage: "/images/gear_pressed.png",
+        width: 38,
+        height: 38,
+        top : 2,
+        right : 5
+    });
+    confBtn.addEventListener('click', function() {
+        var configWindow = new ConfigWindow();
+        tabGroup.activeTab.open(configWindow, {animated: true});
+    });
+    self.add(confBtn);
 
 	// テーブル
 	var table = Ti.UI.createTableView(style.news.table);

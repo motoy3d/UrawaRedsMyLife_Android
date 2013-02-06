@@ -29,7 +29,7 @@ exports.style = {
 	        backgroundColor: 'black',
 	        backgroundSelectedColor : "red",
             separatorColor: '#666',
-            top : 40
+            top : 42
 	    },
 		tableViewRow : {
 			height : Ti.UI.SIZE,
