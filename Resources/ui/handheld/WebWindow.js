@@ -15,17 +15,18 @@ function WebWindow(webData) {
 	});
     Ti.API.info('--------------2 ' + self);
     var title = " " + util.removeLineBreak(webData.title);
+    var shortTitle = title;
     if(title.length > 21) {
-        title = title.substring(0, 21) + "...";
+        shortTitle = title.substring(0, 21) + "...";
     }
     var titleBar = Ti.UI.createLabel(style.common.titleBar);
-    titleBar.text = title;
+    titleBar.text = shortTitle;
 	self.add(titleBar);
 	
 	var webView = Ti.UI.createWebView({
 	    width: Ti.UI.FILL
 	    ,top: 30
-        ,bottom: 50
+        ,bottom: 46
 	});
 
     //TODO
@@ -54,11 +55,11 @@ function WebWindow(webData) {
                 if(!loaded) {
                     indWin.open({modal: true});
                 }
-            }, 100);
+            }, 120);
             //TODO ３秒で消す？
-            // setTimeout(function() {
-                // indWin.close();
-            // }, 3000);
+            setTimeout(function() {
+                indWin.close();
+            }, 4000);
         });
 		webView.addEventListener("load", function(e) {
 		    loaded = true;
@@ -75,9 +76,11 @@ function WebWindow(webData) {
     var back = Ti.UI.createButton({
         image: "/images/arrow_left_grey.png"
         ,backgroundColor: 'transparent'
+        ,backgroundSelectedImage: "/images/arrow_left_grow.png"
+//        ,backgroundLeftCap: 32
         ,enabled: false
         // ,width: 40
-        ,height: 40
+        ,height: 36
         ,top: 5
         ,right: 95
     });
@@ -87,9 +90,10 @@ function WebWindow(webData) {
     var forward = Ti.UI.createButton({
         image: "/images/arrow_right_grey.png"
         ,backgroundColor: 'transparent'
+        ,backgroundSelectedImage: "/images/arrow_right_grow.png"
         ,enabled: false
         // ,width: 40
-        ,height: 40
+        ,height: 36
         ,top: 5
         ,right: 10
     });
@@ -102,16 +106,24 @@ function WebWindow(webData) {
     });
     var facebook = Ti.UI.createButton({
         image: "/images/facebook_icon_grey.png"
+        ,backgroundSelectedImage: "/images/facebook_icon_grow.png"
         ,enabled: false
         ,backgroundColor: 'transparent'
         // ,width: 40
-        ,height: 40
+        ,height: 36
         ,top: 5
         ,right: 180
     });
     // WebViewロード時、戻るボタン、次へボタンの有効化、無効化
     webView.addEventListener('load', function(e) {
-        Ti.API.info('load★ ' + e.url);
+        title = webView.evalJS("document.title");
+        shortTitle = title;
+        Ti.API.info('load★ ' + title + "  " + e.url);
+        if(title && title.length > 21) {
+            shortTitle = title.substring(0, 21) + "...";
+        }
+        titleBar.text = shortTitle;
+
         back.setEnabled(webView.canGoBack());
         back.image = back.enabled? "/images/arrow_left.png" : "/images/arrow_left_grey.png";
         forward.setEnabled(webView.canGoForward());
@@ -140,23 +152,19 @@ function WebWindow(webData) {
             facebookShare();
         }
     });
-    var flexSpace = Ti.UI.createView({
-        width: 100
-    });
     var toolbar = Ti.UI.createView({
         // グラデーションはエラーになるのでイメージで対応
         // https://jira.appcelerator.org/browse/TIMOB-9819
         backgroundImage: "/images/toolbarBackground.png"
         ,backgroundRepeat: true
         ,width: Ti.UI.FILL
-        ,height: 50
+        ,height: 46
         ,bottom: 0
     });
     toolbar.add(facebook);
     toolbar.add(back);
     toolbar.add(forward);
     self.add(toolbar);
-//    self.setToolbar([flexSpace, /*twitter,*/ flexSpace, facebook, flexSpace, back, flexSpace, forward]);
     
     /**
      * facebookでシェアする
@@ -166,9 +174,9 @@ function WebWindow(webData) {
         Ti.API.info('画像＝＝＝' + image);
         var data = {
             link : webView.url
-//                ,name : webData.title
+//            ,name :  title
 //                ,message :  "message"
-//                ,caption : content
+//            ,caption : ""
 //                ,picture : image
             ,locale : "ja_JP"
 //                description : "ユーザの投稿文"
