@@ -108,18 +108,15 @@ function Results(resultsWindow) {
         var detailUrl = "";
         // var resultColor = "black";
         if(tdList[5].a) {
-            score = tdList[5].a.content;
+            result = tdList[5].a.content.substring(0, 1);
+            score = tdList[5].a.content.substring(1);
             detailUrl = tdList[5].a.href;
-        }
-        if(tdList[5].font) {
-            result = tdList[5].font.content;
-            resultImage = "images/lose.png";
-            if("#ffffff" == tdList[5].font.color) {
-                if("●" == result) {
-                    resultImage = "images/win.png";
-                } else {
-                    resultImage = "images/draw.png";
-                }
+            if("◯" == result) {
+                resultImage = "/images/win.png";
+            } else if("●" == result) {
+                resultImage = "/images/lose.png";
+            } else {
+                resultImage = "/images/draw.png";
             }
         }
         var hasDetailResult = detailUrl != "";

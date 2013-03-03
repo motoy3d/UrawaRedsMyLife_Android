@@ -22,6 +22,7 @@ sites[idx++] = new Array("浦和レッズの逆襲日報","http://redsgyakushuu.
 sites[idx++] = new Array("しみマガブログ","http://kaizokuo.blog5.fc2.com/");
 sites[idx++] = new Array("徒然フットボール","http://blogs.yahoo.co.jp/dukaeeq2004");
 sites[idx++] = new Array("湯浅健二のサッカー・ホームページ","http://www.yuasakenji-soccer.com/");
+sites[idx++] = new Array("Sportiva", "http://sportiva.shueisha.co.jp/");
 
 /**
  * ＵＲＬから、サイト名を取得する

@@ -41,6 +41,7 @@ function ConfigWindow(webData) {
             value: simpleDispModeProp
             ,right: 10
             ,top: 20
+            ,verticalAlign: "center"
         });
         //プロパティ保存
         simpleDispModeSwitch.addEventListener("change", function(){

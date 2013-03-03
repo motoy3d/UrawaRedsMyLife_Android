@@ -77,7 +77,16 @@ function WebWindow(webData) {
         ,right: 95
     });
     back.addEventListener("click", function(e){
-        webView.goBack();
+        var referrer = webView.evalJS("document.referrer");
+        //alert("referrer=" + referrer);
+        if(referrer == "") {
+            Ti.API.info('■webData.link=' + webData.link + ", content = " + webData.content);
+            webView.url = "";
+            webView.html = webData.content;
+            //TODO title
+        } else {
+            webView.goBack();
+        }
     });
     var forward = Ti.UI.createButton({
         image: "/images/arrow_right_grey.png"

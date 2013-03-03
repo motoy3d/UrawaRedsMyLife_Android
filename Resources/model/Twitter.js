@@ -76,8 +76,7 @@ function Twitter() {
                     Ti.API.info('e.data.jsonが１件のため配列に変換')
                     e.data.json = new Array(e.data.json);
                 }
-                //Ti.API.info('JSON length = ' + JSON.stringify(e.data.json, null, ' ').length);
-                Ti.API.info('JSON length = ' + JSON.stringify(e.data.json, null, ' '));
+//                Ti.API.info('JSON length = ' + JSON.stringify(e.data.json, null, ' '));
                 // 取得したJSONをリスト化する
                 var tweetList = e.data.json.map(
                     function(item) {

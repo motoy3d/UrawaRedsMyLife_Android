@@ -47,7 +47,7 @@ function NewsWindow(tabGroup) {
     self.add(refreshBtn);
     
     // 設定ボタン---------------------------------------
-    var confBtn = Ti.UI.createButton({
+    var configButton = Ti.UI.createButton({
         backgroundImage: "/images/gear.png",
         backgroundSelectedImage: "/images/gear_pressed.png",
         width: 38,
@@ -55,11 +55,11 @@ function NewsWindow(tabGroup) {
         top : 2,
         right : 5
     });
-    confBtn.addEventListener('click', function() {
+    configButton.addEventListener('click', function() {
         var configWindow = new ConfigWindow();
         tabGroup.activeTab.open(configWindow, {animated: true});
     });
-    self.add(confBtn);
+    self.add(configButton);
 
 	// テーブル
 	var table = Ti.UI.createTableView(style.news.table);
