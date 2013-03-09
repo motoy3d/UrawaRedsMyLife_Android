@@ -2,7 +2,8 @@
  * Twitter画面UI
  */
 function TwitterWindow(tabGroup) {
-    var Twitter = require("/model/Twitter");
+//    var Twitter = require("/model/Twitter");
+    var Twitter = require("/model/TwitterSearch");
     
     var util = require("/util/util").util;
     var style = require("/util/style").style;
@@ -257,7 +258,8 @@ function TwitterWindow(tabGroup) {
             Ti.Filesystem.resourcesDirectory, 'tweetTemplate.txt');
         var template = templateFile.read().toString();
         var html = util.replaceAll(template, "{profileImageUrl}", t.profileImageUrl);
-        html = util.replaceAll(html, "{userName}", "@" + t.userName);
+        html = util.replaceAll(html, "{userName}", t.userName);
+        html = util.replaceAll(html, "{userScreenName}", t.userScreenName);
         var text = util.tweetTrimer(t.text);
         html = util.replaceAll(html, "{text}", text);
         html = util.replaceAll(html, "{timeText}", t.timeText);

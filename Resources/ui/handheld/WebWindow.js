@@ -22,7 +22,7 @@ function WebWindow(webData) {
     var titleBar = Ti.UI.createLabel(style.common.titleBar);
     titleBar.text = shortTitle;
 	self.add(titleBar);
-	
+	var referrer = "";
 	var webView = Ti.UI.createWebView({
 	    width: Ti.UI.FILL
 	    ,top: 30
@@ -37,11 +37,7 @@ function WebWindow(webData) {
 		 webData.content.indexOf('<img src="http://feeds.feedburner.com') == -1 
 		 )
 	) {
-		var content = 
-			webData.content + "<br/><br/>" 
-			+ "<a href=\"" + webData.link + "\">サイトを開く</a>"
-            ;
-		webView.html = content;
+		webView.html = createWebContent(webData);
 		self.add(webView);
 	} else {
         var indWin = customIndicator.create();
@@ -77,17 +73,20 @@ function WebWindow(webData) {
         ,right: 95
     });
     back.addEventListener("click", function(e){
-        var referrer = webView.evalJS("document.referrer");
+        referrer = webView.evalJS("document.referrer");
+        Ti.API.info("referrer=" + referrer);
         //alert("referrer=" + referrer);
         if(referrer == "") {
-            Ti.API.info('■webData.link=' + webData.link + ", content = " + webData.content);
             webView.url = "";
-            webView.html = webData.content;
+            webView.html = createWebContent(webData);
+            titleBar.text = shortTitle;
+            Ti.API.info('■webData.link=' + webData.link + ", content = " + webView.html);
             //TODO title
         } else {
             webView.goBack();
         }
     });
+    //TODO style.js
     var forward = Ti.UI.createButton({
         image: "/images/arrow_right_grey.png"
         ,backgroundColor: 'transparent'
@@ -115,8 +114,23 @@ function WebWindow(webData) {
         ,top: 5
         ,right: 180
     });
+    // WebViewロード前
+    var beforeLoadFunc = function(e) {
+        Ti.API.info('beforeload-------------------------');
+        Ti.API.info(util.toString(e));
+        if(referrer && e.url && e.url.indexOf("file://") == 0) {
+            //referrerがnullでない場合があり、エラーになる。
+            Ti.API.info('★★★★★★★★e.url=' + e.url);
+            //TODO
+            // webView.url = "";
+            // webView.html = createWebContent(webData);
+            // titleBar.text = shortTitle;
+        }
+    };
+    webView.addEventListener('beforeload', beforeLoadFunc);
+    
     // WebViewロード時、戻るボタン、次へボタンの有効化、無効化
-    webView.addEventListener('load', function(e) {
+    var loadFunc = function(e) {
         if(e.url.indexOf("http") == 0) {
             title = webView.evalJS("document.title");
             shortTitle = title;
@@ -126,14 +140,18 @@ function WebWindow(webData) {
         }
         Ti.API.info('load★ title=' + title + "  e.url=" + e.url);
         titleBar.text = shortTitle;
-
-        back.setEnabled(webView.canGoBack());
+        if(e.url && e.url.indexOf("file://") == 0) {
+            back.setEnabled(false);
+        } else {
+            back.setEnabled(webView.canGoBack());
+        }
         back.image = back.enabled? "/images/arrow_left.png" : "/images/arrow_left_grey.png";
         forward.setEnabled(webView.canGoForward());
         forward.image = forward.enabled? "/images/arrow_right.png" : "/images/arrow_right_grey.png";
         facebook.setEnabled(webView.url.indexOf("facebook.com") == -1);
         facebook.image = facebook.enabled? "/images/facebook_icon.png" : "/images/facebook_icon_grey.png";
-    });
+    };
+    webView.addEventListener('load', loadFunc);
 
     // facebookボタン
     facebook.addEventListener("click", function(e){
@@ -168,6 +186,14 @@ function WebWindow(webData) {
     toolbar.add(back);
     toolbar.add(forward);
     self.add(toolbar);
+    
+    /**
+     * 簡易ページに表示するコンテンツを生成する。
+     */
+    function createWebContent(webData) {
+        return webData.content + "<br/><br/>" 
+            + "<a href=\"" + webData.link + "\">サイトを開く</a><br/><br/>";
+    }
     
     /**
      * facebookでシェアする

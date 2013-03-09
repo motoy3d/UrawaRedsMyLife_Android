@@ -144,19 +144,16 @@ function Results(resultsWindow) {
         }
         teamLabel.text = teamName;
         row.add(teamLabel);
-        // 結果ラベル
-        var resultLabel = Ti.UI.createImageView(style.results.resultLabel);
-        if(resultImage != "") {
-            resultLabel.image = resultImage;
-        }
-    
-        row.add(resultLabel);
-        // スコアラベル
-        var scoreLabel = Ti.UI.createLabel(style.results.scoreLabel);
+        // 結果イメージラベル、スコアラベル
         if(score != "") {
+            var scoreLabel = Ti.UI.createLabel(style.results.scoreLabel);
+            var resultLabel = Ti.UI.createImageView(style.results.resultLabel);
             scoreLabel.text = score;
+            resultLabel.image = resultImage;
+            Ti.API.info('-------' + teamName + ": " + score + " : " + resultImage);
+            row.add(scoreLabel);
+            row.add(resultLabel);
         }
-        row.add(scoreLabel);
     
         // 詳細リンクボタン
         var detailButton = Ti.UI.createButton(style.results.detailButton);

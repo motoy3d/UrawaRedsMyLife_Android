@@ -172,7 +172,7 @@ exports.style = {
 		resultLabel : {
 			width : 32,
 			height : 32,
-			top : 46,
+			top : 50,
 			right : 60			
 		},
 		scoreLabel : {
