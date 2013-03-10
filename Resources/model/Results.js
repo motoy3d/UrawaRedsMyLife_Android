@@ -14,7 +14,7 @@ function Results(resultsWindow) {
     var resultsQuery = "SELECT * FROM html WHERE url='http://www.urawa-reds.co.jp/game/' "
         + "and xpath=\"//div[@class='mainContentColumn']/table/tr\"";
     var urawaEncoded = encodeURIComponent('浦和');
-    var digestEncoded = encodeURIComponent('ダイジェスト');
+    var highlightEncoded = encodeURIComponent('ハイライト');
 
     /**
      * 浦和公式サイトの試合日程htmlを読み込む
@@ -186,9 +186,9 @@ function Results(resultsWindow) {
             var dateYYMMDD = String(currentSeason).substring(2) + month + day;
             var dateYYYYMMDD = encodeURIComponent(currentSeason + "年" + month + "月" + day + "日");
             var teamEncoded = encodeURIComponent(team);
-            var keyword1 = currentSeason + "." + month + "." + day + '+' + urawaEncoded + '+' + teamEncoded /*+ encodeURIComponent("戦")*/;
-            var keyword2 = dateYYYYMMDD + '+' + urawaEncoded + '+' + teamEncoded + '+' + digestEncoded;
-            Ti.API.debug("キーワード：" + keyword1 + "  :  " + keyword2);
+            var keyword1 = dateYYMMDD + '+' + teamEncoded + "+" + highlightEncoded;
+            var keyword2 = currentSeason + "." + month + "." + day + '+' + urawaEncoded + '+' + teamEncoded /*+ encodeURIComponent("戦")*/;
+            Ti.API.info("キーワード：" + keyword1 + "  :  " + keyword2);
             // ResultsWindow側の処理を呼び出す
             resultsWindow.searchMovie({
                 title: compe + "(" + date + ") " + team,

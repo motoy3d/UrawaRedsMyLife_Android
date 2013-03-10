@@ -1,9 +1,11 @@
 /**
  * Twitter画面UI
+ * @tabGroup 親タブグループ
+ * @target searchTweets or playerTweets
  */
-function TwitterWindow(tabGroup) {
-//    var Twitter = require("/model/Twitter");
-    var Twitter = require("/model/TwitterSearch");
+function TwitterWindow(tabGroup, target) {
+    var Twitter = require("/model/Twitter");
+    var WebWindow = require("/ui/handheld/WebWindow");
     
     var util = require("/util/util").util;
     var style = require("/util/style").style;
@@ -89,7 +91,7 @@ function TwitterWindow(tabGroup) {
     // テーブル
     var table = Ti.UI.createTableView(style.twitter.table);
     table.allowsSelectionDuringEditing = false;
-    var twitter = new Twitter();
+    var twitter = new Twitter(target);
 
     /**
      * tweetを読み込んで表示する
@@ -247,9 +249,6 @@ function TwitterWindow(tabGroup) {
     // テーブルのクリックイベント
     table.addEventListener('click', function(e) {
         var t = e.row.tweet;
-        var tweetWin = Ti.UI.createWindow({
-            navBarHidden: true
-        });
         // インジケータ
         // var tweetWinInd = Ti.UI.createActivityIndicator({message : style.common.loadingMsg});
         // tweetWin.add(tweetWinInd);
@@ -264,36 +263,13 @@ function TwitterWindow(tabGroup) {
         html = util.replaceAll(html, "{text}", text);
         html = util.replaceAll(html, "{timeText}", t.timeText);
 
-        var webView = Ti.UI.createWebView({
-            html: html
-        });
-
-        // ロード前のイベント
-        var ind;
-        webView.addEventListener('beforeload',function(e){
-            if(e.navigationType != 5) {//リンク先URLのhtml中の画像やiframeの場合、5
-                Ti.API.info('beforeload #################### ');
-                for(i in e) {
-                    Ti.API.info('   ' + i + ' = ' + e[i]);
-                }
-                webView.opacity = 0.8;
-                // Ti.API.info('インジケータshow');
-                // ind = Ti.UI.createActivityIndicator({color: 'red'});
-                // webView.add(ind);
-                // ind.show();
-                webView.url = e.url;
-            }
-        }); 
-        // ロード完了時にインジケータを隠す
-        webView.addEventListener("load", function(e) {
-            if(ind) {
-                Ti.API.info('インジケータhide');
-                webView.opacity = 1.0;
-                ind.hide();
-                ind = null;
-            }
-        });
-        tweetWin.add(webView);
+        var webData = {
+            title: "tweet"
+            ,html: html
+            ,toolbarVisible: false
+        };
+        var tweetWin = new WebWindow(webData);
+        tweetWin.tabBarHidden = true;
         tabGroup.activeTab.open(tweetWin, {animated: true});
     });
 

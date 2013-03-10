@@ -31,7 +31,7 @@ a:active { font-size: larger; color: #ff0000; }
 <body>
 <table id="tweet">
 	<tr>
-		<td width="70" height="54"><img src="{profileImageUrl}"></td>
+		<td width="64" height="54"><img src="{profileImageUrl}"></td>
 		<td>{userName}<br/><span class="grey">{userScreenName}</span></td>
 	</tr>
 	<tr><td colspan="2"><hr size="1" class="separator"/></td></tr>

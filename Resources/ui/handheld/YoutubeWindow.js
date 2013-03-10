@@ -14,11 +14,9 @@ function YoutubeWindow(youtubeData) {
 	// function
 	self.searchYoutube = searchYoutube;
 
-	var keyword1 = youtubeData.key1;
-	var keyword2 = youtubeData.key2;
 	// create table view data object
 	var data = [];
-	var maxResults = 25;
+	var maxResults = 10;
 	var startIndex = 1;
 	var webModal;
 	var webModalView;
@@ -105,23 +103,8 @@ function YoutubeWindow(youtubeData) {
 				} else {
 					rowsData = new Array(createYoutubeRow(e.data.item));
 				}
-				Ti.API.info('>>>>> map完了');
-				// 2回目以降の追加ロード時
-				if(tableView.data[0] && 0 < tableView.data[0].rows.length) {
-					// var lastRow = tableView.data[0].rows.length - 1;
-					// tableView.deleteRow(lastRow, null);
-					// var scrollToIdx = tableView.data[0].rows.length;
-					// for(i=0; i<rowsData.length; i++) {
-						// if(i == 0) {
-							// newsInd.hide();
-						// }
-						// tableView.appendRow(rowsData[i]);
-					// }
-					// tableView.scrollToIndex(scrollToIdx, null);
-				} else {
-					// 初回ロード時
-					tableView.setData(rowsData);
-				 }
+//				Ti.API.info('>>>>> map完了');
+				tableView.setData(rowsData);
 	 			startIndex += maxResults;
 	 			indWin.close();
 			} catch(e) {
@@ -136,75 +119,80 @@ function YoutubeWindow(youtubeData) {
 	 * TableViewRowを生成して返す
 	 */
 	function createYoutubeRow(item/*, index, array*/) {
-		Ti.API.info('###### createYoutubeRow() title=' + item.title);
-		var title = item.title;
-	
-		var summary = "";
-		if(item.pubDate) {
-			var pubDate = new Date(item.pubDate);
-			var minutes = pubDate.getMinutes();
-			if(minutes < 10) {
-				minutes = "0" + minutes;
-			}
-			summary = item.statistics.viewCount + "回再生    "
-			    + (pubDate.getMonth() + 1) + "/" 
-				+ pubDate.getDate() + " " + pubDate.getHours() + ":" + minutes
-				;
-		}
-	
-		var link = item.link;
-	
-		var guid = link.substring(link.indexOf("?v=") + 3);
-		guid = guid.substring(0, guid.indexOf("&"));
-	
-		var thumbnail = "http://i.ytimg.com/vi/" + guid + "/2.jpg";
-	
-		var row = Ti.UI.createTableViewRow({
-			height : 90,
-	//		backgroundSelectedColor : "#f33",
-			type : "CONTENT"
-		});
-	
-		row.url = link;
-		row.guid = guid;
-		row.videotitle = title;
-		row.backgroundColor = "#000000";
-		row.color = "#ffffff";
-	   //TODO
-		var labelTitle = Ti.UI.createLabel({
-			text : title,
-			left : 130,
-			right : 10,
-			top : 5,
-			height : 50,
-			font : {
-				fontSize : 14
-			},
-			color : "#ffffff"
-		});
-		row.add(labelTitle);
-	
-		var labelSummary = Ti.UI.createLabel({
-			text : summary,
-			left : 130,
-            right : 10,
-			bottom : 9,
-			font : {
-				fontSize : 13
-			},
-			color : "#ffffff"
-		});
-		row.add(labelSummary);
-	
-		var img = Ti.UI.createImageView({
-			image : thumbnail,
-			left : 0,
-			height : 90,
-			width : 120
-		});
-		row.add(img);
-	
-		return row;
+	    try {
+    		Ti.API.info('###### createYoutubeRow() title=' + item.title);
+    		var title = item.title;
+    	
+    		var summary = "";
+    		if(item.pubDate) {
+    			var pubDate = new Date(item.pubDate);
+    			var minutes = pubDate.getMinutes();
+    			if(minutes < 10) {
+    				minutes = "0" + minutes;
+    			}
+    			var viewCount = "";
+    			if(item.statistics) {
+    			    viewCount = item.statistics.viewCount + "回再生    ";
+    			}
+    			summary = viewCount
+    			    + (pubDate.getMonth() + 1) + "/" 
+    				+ pubDate.getDate() + " " + pubDate.getHours() + ":" + minutes;
+    		}
+    		var link = item.link;
+    	
+    		var guid = link.substring(link.indexOf("?v=") + 3);
+    		guid = guid.substring(0, guid.indexOf("&"));
+    	
+    		var thumbnail = "http://i.ytimg.com/vi/" + guid + "/2.jpg";
+    	
+    		var row = Ti.UI.createTableViewRow({
+    			height : 90,
+    	//		backgroundSelectedColor : "#f33",
+    			type : "CONTENT"
+    		});
+    	
+    		row.url = link;
+    		row.guid = guid;
+    		row.videotitle = title;
+    		row.backgroundColor = "#000000";
+    		row.color = "#ffffff";
+    	   //TODO
+    		var labelTitle = Ti.UI.createLabel({
+    			text : title,
+    			left : 130,
+    			right : 10,
+    			top : 5,
+    			height : 50,
+    			font : {
+    				fontSize : 14
+    			},
+    			color : "#ffffff"
+    		});
+    		row.add(labelTitle);
+    	
+    		var labelSummary = Ti.UI.createLabel({
+    			text : summary,
+    			left : 130,
+                right : 10,
+    			bottom : 9,
+    			font : {
+    				fontSize : 13
+    			},
+    			color : "#ffffff"
+    		});
+    		row.add(labelSummary);
+    	
+    		var img = Ti.UI.createImageView({
+    			image : thumbnail,
+    			left : 0,
+    			height : 90,
+    			width : 120
+    		});
+    		row.add(img);
+            return row;
+        } catch(ex) {
+            Ti.API.info('Youtube読み込み時エラー : ' + ex);
+        }
 	}
 	
 	/**
