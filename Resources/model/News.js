@@ -181,11 +181,13 @@ function createNewsRow(item) {
             Ti.API.debug('画像＝＝＝＝＝' + imgUrl + "  >  " + item.title);
             // アイコン等はgifが多いのでスキップ
             if(!util.isUnnecessaryImage(imgUrl)) {
- /*               var imgLabel = Ti.UI.createImageView(style.news.imgView);
+//TODO Android4.0でエラー？ F-10D実機では問題なし。
+/*                var imgLabel = Ti.UI.createImageView(style.news.imgView);
                 imgLabel.image = imgUrl;
                 row.add(imgLabel);
                 hasImage = true;
-*/            }
+*/
+            }
         }
     }
 	// タイトルラベル
@@ -257,7 +259,7 @@ function createNewsRow(item) {
 	}
 	var siteNameLabel = Ti.UI.createLabel(style.news.siteNameLabel);
     if(hasImage) {
-        siteNameLabel.left = siteNameLabel.left + imgLabel.width + 10;
+//        siteNameLabel.left = siteNameLabel.left + imgLabel.width + 10;
     }
 	siteNameLabel.text = siteName + "   " + pubDateText;
 	// row情報セット

@@ -97,8 +97,9 @@ text: '更新'
 	function loadDetailHtml(detailUrl) {
 		Ti.API.info("loadDetailHtml----------");
 		var webData = {
-			title : "試合詳細",
-			link : detailUrl
+			title : "試合詳細"
+			,link : detailUrl
+            ,toolbarVisible : true
 		};
 		var webWindow = new WebWindow(webData);
 		tabGroup.activeTab.open(webWindow, {animated: true});
@@ -110,8 +111,6 @@ text: '更新'
 	function searchMovie(searchCond) {
 		Ti.API.info("searchMovie----------k1 =  " + searchCond.key1 + "¥n k2 =  " + searchCond.key2);
 		var youtubeWindow = new YoutubeWindow(searchCond);
-		//youtubeWindow.doYoutubeSearch(searchCond.key1, searchCond.key2);
-		youtubeWindow.searchYoutube(searchCond.key1, searchCond.key2);
 		tabGroup.activeTab.open(youtubeWindow, {animated: true});
 	}
 	// window openイベント

@@ -125,11 +125,12 @@ function NewsWindow(tabGroup) {
     		e.row.backgroundColor = style.news.visitedBgColor;
     		news.saveVisitedUrl(e.row.linkUrl);
     		var webData = {
-    			title : e.row.pageTitle,
-    			siteName : e.row.fullSiteName,
-    			link : e.row.linkUrl,
-    			content : e.row.content,
-    			pubDate : e.row.pubDate
+    			title : e.row.pageTitle
+    			,siteName : e.row.fullSiteName
+    			,link : e.row.linkUrl
+    			,content : e.row.content
+    			,pubDate : e.row.pubDate
+    			,toolbarVisible : true
     		};
     		var webWindow = new WebWindow(webData);
     Ti.API.info('-------webWindow = ' + webWindow);

@@ -27,6 +27,7 @@ function WebWindow(webData) {
 	    width: Ti.UI.FILL
 	    ,top: 30
         ,bottom: 46
+//        ,scalesPageToFit : true   //TODO
 	});
     if(!webData.toolbarVisible) { //twitter画面から遷移した場合
         webView.bottom = 0;
@@ -71,7 +72,7 @@ function WebWindow(webData) {
 	}
 
     //ツールバー
-    if(webData.toolbarVisible) { //twitter画面から遷移した場合
+    if(webData.toolbarVisible) { //twitter画面以外から遷移した場合
         createToolbar();
     }
     
