@@ -12,7 +12,7 @@ function ConfigWindow(webData) {
 	});
     var table = Ti.UI.createTableView({
         backgroundColor: "black"
-        ,separatorColor: '#666'
+        ,separatorColor: '#000'
         ,allowsSelection: false
         ,width: Ti.UI.FILL
         ,height: Ti.UI.FILL
@@ -23,7 +23,7 @@ function ConfigWindow(webData) {
     {
         var dispModeRow = Ti.UI.createTableViewRow({
             width: Ti.UI.FILL
-            ,height: 80
+            ,height: 90
         });
         var simpleDispModeLabel = Ti.UI.createLabel({
             text: "簡易記事モード(高速)"
@@ -40,7 +40,7 @@ function ConfigWindow(webData) {
         var simpleDispModeSwitch = Ti.UI.createSwitch({
             value: simpleDispModeProp
             ,right: 10
-            ,top: 20
+            ,top: 15
             ,verticalAlign: "center"
         });
         //プロパティ保存
