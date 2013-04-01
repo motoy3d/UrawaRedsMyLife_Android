@@ -53,7 +53,7 @@ exports.style = {
             left : 4
         },
 		siteNameLabel : {
-			color : "lightgray",
+			color : "#909090",
 			font : {fontSize : 14},
 			width : Ti.UI.FILL,
 			height : Ti.UI.SIZE,
@@ -207,13 +207,20 @@ exports.style = {
 		}
 	},
 	standings : {
+        standingsView : {
+            top : 0
+            ,backgroundColor: "black"
+            ,bottom: 46
+        },
 	    table : {
             top: 37,
             allowsSelection: false,
             separatorColor: '#666'	        
+            ,backgroundColor: "black"
 	    },
 	    headerView : {
-	        backgroundColor: 'black'
+            top: 0
+	        ,backgroundColor: 'black'
 	    },
 	    headerLabel : {
             height: 33,
@@ -232,7 +239,33 @@ exports.style = {
             height: 28
             ,color: 'white'
             ,backgroundColor: 'black'	        
-	    }
+	    },
+	    j1Button : {
+            title: "J1"
+            ,color: "lightgray"
+            ,opacity: 0.5
+            ,borderColor: "#902020"
+            ,borderWidth: 1
+            ,backgroundImage: "/images/toolbarBackground.png"
+            ,borderRadius: 8
+            ,enabled: false
+            ,height: 36
+            ,width: 100
+            ,top: 5
+	    },
+        aclButton : {
+            title: "ACL"
+            ,color: "white"
+            ,opacity: 1.0
+            ,borderColor: "#902020"
+            ,borderWidth: 1
+            ,backgroundImage: "/images/toolbarBackground.png"
+            ,borderRadius: 8
+            ,enabled: true
+            ,height: 36
+            ,width: 100
+            ,top: 5
+        }
 	},
 	twitter : {
 	    window : {
@@ -264,7 +297,7 @@ exports.style = {
 				fontSize : 15,
 				fontWeight: 'bold'
 			},
-			height : 17,
+			height : 19,
             width : Ti.UI.FILL,
 			top : 5,
 			left : 58			
@@ -279,7 +312,6 @@ exports.style = {
 			bottom : 24
 		},
 		timeLabel : {
-		    /*color : "#d87",*/
 		   color : "lightgray",
             font : {fontSize : 13},
             height : Ti.UI.SIZE,
@@ -339,6 +371,62 @@ exports.style = {
             bottom:13,
             width:30,
             height:30
+        }
+	},
+	webWindow : {
+	    backButton : {
+            image: "/images/arrow_left_grey.png"
+            ,backgroundColor: 'transparent'
+            ,backgroundSelectedImage: "/images/arrow_left_grow.png"
+            ,enabled: false
+            ,height: 36
+            ,top: 5
+            ,right: 85  
+	    },
+	    forwardButton : {
+            image: "/images/arrow_right_grey.png"
+            ,backgroundColor: 'transparent'
+            ,backgroundSelectedImage: "/images/arrow_right_grow.png"
+            ,enabled: false
+            // ,width: 40
+            ,height: 36
+            ,top: 5
+            ,right: 10
+	    },
+	    twitterButton : {
+            image: "/images/twitter_icon2.png"
+            ,enabled: false
+            ,backgroundColor: 'transparent'
+            ,height: 36
+            ,top: 5
+            ,left: 90	        
+	    },
+        facebookButton : {
+            image: "/images/facebook_icon_grey.png"
+            ,backgroundSelectedImage: "/images/facebook_icon_grow.png"
+            ,enabled: false
+            ,backgroundColor: 'transparent'
+            // ,width: 40
+            ,height: 36
+            ,top: 5
+            ,right: 150
+        },
+        lineButton : {
+            image: "/images/line_icon.png"
+            ,enabled: false
+            ,backgroundColor: 'transparent'
+            ,height: 36
+            ,top: 5
+            ,left: 10
+        },
+        toolbar : {
+            /* グラデーションはエラーになるのでイメージで対応
+               https://jira.appcelerator.org/browse/TIMOB-9819*/
+            backgroundImage: "/images/toolbarBackground.png"
+            ,backgroundRepeat: true
+            ,width: Ti.UI.FILL
+            ,height: 46
+            ,bottom: 0
         }
 	}
 }

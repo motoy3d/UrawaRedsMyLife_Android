@@ -17,26 +17,41 @@
         version = Ti.Platform.version,
         height = Ti.Platform.displayCaps.platformHeight,
         width = Ti.Platform.displayCaps.platformWidth;
+    Ti.API.info('★★osname=' + osname);
+    Ti.API.info('★★version=' + version);
     Ti.API.info('★★Android API_LEVEL = ' + Ti.Platform.Android.API_LEVEL);
-if(Ti.Platform.Android.API_LEVEL > 9) {
-    disablePolicy();
-}
+    Ti.API.info('★★width=' + width);
+    Ti.API.info('★★height=' + height);
+    Ti.API.info('★★density=' + Ti.Platform.displayCaps.density);
+    Ti.API.info('★★dpi=' + Ti.Platform.displayCaps.dpi);
+    Ti.API.info('★★xdpi=' + Ti.Platform.displayCaps.xdpi);
+    Ti.API.info('★★ydpi=' + Ti.Platform.displayCaps.ydpi);
+
+    if(Ti.Platform.Android.API_LEVEL > 9) {
+        disablePolicy();
+    }
 
 	Ti.include('util/analytics.js');
 	startAnalytics();
 	initDB();
-	
-	
+//    checkAppInstalled();
 	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
 	//yourself what you consider a tablet form factor for android
 	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
 	
-//	Ti.UI.iPhone.statusBarStyle = Ti.UI.iPhone.StatusBar.OPAQUE_BLACK;
-	
 	// 全置換：全ての文字列 org を dest に置き換える  
 	String.prototype.replaceAll = function (org, dest){  
 	  return this.split(org).join(dest);  
-	}      
+	}
+    //バイト数を返す。
+    String.prototype.getBytes = function() {
+        var count = 0;
+        for (i=0; i<this.length; i++) {
+            var n = escape(this.charAt(i));
+            if (n.length < 4) count++; else count+=2;
+        }
+        return count;
+    }
 	var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
 	var tabGroup = new ApplicationTabGroup();
 	// TabGroupをglobalにセット
@@ -94,7 +109,26 @@ function startAnalytics() {
 	}
 	analytics.start(10);	//10秒に1回データ送信
 }
-
+/*
+//util.jsに移動
+function checkAppInstalled() {
+    var checkapp = require('com.motoy3d.check.app.android');
+    if (checkapp.exists("com.twitter.android")) {
+        Ti.API.info('★★Twitter app installed.');
+    } else {
+        Ti.API.info('★★Twitter app not installed.');
+    }
+    if (checkapp.exists("jp.naver.line.android")) {
+        Ti.API.info('★★LINE app installed.');
+    } else {
+        Ti.API.info('★★LINE app not installed.');
+    }
+    if (checkapp.exists("com.facebook.katana")) {
+        Ti.API.info('★★Facebook app installed.');
+    } else {
+        Ti.API.info('★★Facebook app not installed.');
+    }    
+}*/
 function disablePolicy() {
     // 自前モジュールによりStrictModeを回避
     var androidignorestrictmode = require('motoy3d.android.ignore.strictmode');

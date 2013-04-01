@@ -1,4 +1,5 @@
 var style = require("/util/style").style;
+var checkapp = require('com.motoy3d.check.app.android');
 //var customIndicator = require("/CustomIndicator").customIndicator;
 exports.util = {
 	/**
@@ -31,6 +32,23 @@ exports.util = {
 		}
 		return (sub >= 0) && (text.lastIndexOf(suffix) === sub);
 	},
+    /**
+     * 文字列を指定バイト数以下にカットして返す
+     */
+    cutToByteLength : function(text, byteLen) {
+        var count = 0;
+        var result = "";
+        for (i=0; i<text.length; i++) {
+            var ch = text.charAt(i);
+            var escChar = escape(ch);
+            if (escChar.length < 4) count++; else count+=2;
+            result += ch;
+            if(byteLen < count) {
+                return result;
+            }
+        }
+        return text;
+    },
 	/**
 	 * オフラインメッセージダイアログを表示する
 	 */
@@ -103,6 +121,16 @@ exports.util = {
         else if(teamName == 'ガイナーレ鳥取') return '鳥取';
         else if(teamName == 'FC町田ゼルビア') return '町田';
 	},
+    /**
+     * Jチーム名リスト返す。
+     */
+    getTeamNameList : function() {
+        return new Array(
+            "横浜","大阪","浦和","東京","鳥栖","鹿島","大宮","仙台","広島","名古屋","柏","大分","湘南","清水","磐田","甲府"
+            ,"新潟","川崎","神戸","京都","鳥取","松本","大阪","群馬","山形","福岡","富山","千葉","横浜","愛媛","北九州","水戸"
+            ,"岡山","徳島","栃木","熊本","長崎","東京","札幌","岐阜"
+            );
+    },
 	/**
 	 *  ゼロパディング
 	 */
@@ -136,6 +164,22 @@ exports.util = {
         var datestr = '' + (1900 + date.getYear())+'/'+ zeroPad(date.getMonth()+1, 2) 
             + "/" + zeroPad(date.getDate(), 2)
             + "  " + zeroPad(date.getHours(), 2) + ":" + zeroPad(date.getMinutes(), 2);
+        return datestr;
+    },  
+    /**
+     * 日時分秒ミリ秒をフォーマットする 
+     */
+    formatDatetime2 : function(date) {
+        var zeroPad = function(str, length) {
+            return new Array(length - ('' + str).length + 1).join('0') + str;
+        }
+        if(!date) {
+            date = new Date();
+        }
+        var datestr = '' + (1900 + date.getYear())+'/'+ zeroPad(date.getMonth()+1, 2) 
+            + "/" + zeroPad(date.getDate(), 2)
+            + "  " + zeroPad(date.getHours(), 2) + ":" + zeroPad(date.getMinutes(), 2)
+            + ":" + zeroPad(date.getSeconds(), 2) + "." + date.getMilliseconds();
         return datestr;
     },  
     /**
@@ -221,7 +265,7 @@ exports.util = {
         var s = '';
         if(obj) {
             for(v in obj) {
-                s += "  " + v + "=" + obj[v] + '¥n';
+                s += "   " + v + "=" + obj[v];
             }
             return s;
         } else {
@@ -269,8 +313,14 @@ exports.util = {
             }
             if ( flgAllReplaced ) break;
         }
-    
         return text;
+    },
+    /**
+     * アプリがインストールされている場合にtrueを返す。
+     * @param {Object} packageName
+     */
+    isAppInstalled : function(packageName) {
+        return checkapp.exists(packageName);
     }
 
 }

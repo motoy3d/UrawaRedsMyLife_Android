@@ -7,6 +7,9 @@ function WebWindow(webData) {
     var style = require("/util/style").style;
     var customIndicator = require("/util/CustomIndicator").customIndicator;
 	var newsSource = require("/model/newsSource");
+	var twitterInstalled = util.isAppInstalled("com.twitter.android");
+    var facebookInstalled = util.isAppInstalled("com.facebook.katana");
+    var lineInstalled = util.isAppInstalled("jp.naver.line.android");
 	Ti.API.info('--------------1');
 	//TODO
 	var self = Ti.UI.createWindow({
@@ -38,6 +41,7 @@ function WebWindow(webData) {
 	
     if(webData.html) {  //tweet
         webView.html = webData.html;
+        webView.scalesPageToFit = false;
         self.add(webView);
     }
 	else if(simpleDispModeProp &&
@@ -46,6 +50,7 @@ function WebWindow(webData) {
 		 webData.content.indexOf('<img src="http://feeds.feedburner.com') == -1 
 		 )
 	) {
+        webView.scalesPageToFit = false;
 		webView.html = createWebContent(webData);
 		self.add(webView);
 	} else {
@@ -66,6 +71,7 @@ function WebWindow(webData) {
 		    loaded = true;
             indWin.close();
 		});
+        webView.scalesPageToFit = true;
 		webView.setUrl(webData.link);
 		self.add(webView);	
         Ti.API.info("----------- 9");
@@ -80,15 +86,7 @@ function WebWindow(webData) {
      * ツールバーを生成する。
      */
     function createToolbar() {
-        var back = Ti.UI.createButton({
-            image: "/images/arrow_left_grey.png"
-            ,backgroundColor: 'transparent'
-            ,backgroundSelectedImage: "/images/arrow_left_grow.png"
-            ,enabled: false
-            ,height: 36
-            ,top: 5
-            ,right: 95
-        });
+        var back = Ti.UI.createButton(style.webWindow.backButton);
         back.addEventListener("click", function(e){
             referrer = webView.evalJS("document.referrer");
             Ti.API.info("referrer=" + referrer);
@@ -103,34 +101,13 @@ function WebWindow(webData) {
                 webView.goBack();
             }
         });
-        //TODO style.js
-        var forward = Ti.UI.createButton({
-            image: "/images/arrow_right_grey.png"
-            ,backgroundColor: 'transparent'
-            ,backgroundSelectedImage: "/images/arrow_right_grow.png"
-            ,enabled: false
-            // ,width: 40
-            ,height: 36
-            ,top: 5
-            ,right: 10
-        });
+        var forward = Ti.UI.createButton(style.webWindow.forwardButton);
         forward.addEventListener("click", function(e){
             webView.goForward();
         });
-        var twitter = Ti.UI.createButton({
-            image: "/images/twitter_icon.png"
-            ,enabled: false
-        });
-        var facebook = Ti.UI.createButton({
-            image: "/images/facebook_icon_grey.png"
-            ,backgroundSelectedImage: "/images/facebook_icon_grow.png"
-            ,enabled: false
-            ,backgroundColor: 'transparent'
-            // ,width: 40
-            ,height: 36
-            ,top: 5
-            ,right: 180
-        });
+        var twitter = Ti.UI.createButton(style.webWindow.twitterButton);
+        var facebook = Ti.UI.createButton(style.webWindow.facebookButton);
+        var line = Ti.UI.createButton(style.webWindow.lineButton);
         // WebViewロード前
         var beforeLoadFunc = function(e) {
             Ti.API.info('beforeload-------------------------');
@@ -148,6 +125,7 @@ function WebWindow(webData) {
         
         // WebViewロード時、戻るボタン、次へボタンの有効化、無効化
         var loadFunc = function(e) {
+            webView.scalesPageToFit = true;
             if(e.url.indexOf("http") == 0) {
                 title = webView.evalJS("document.title");
                 shortTitle = title;
@@ -165,13 +143,29 @@ function WebWindow(webData) {
             back.image = back.enabled? "/images/arrow_left.png" : "/images/arrow_left_grey.png";
             forward.setEnabled(webView.canGoForward());
             forward.image = forward.enabled? "/images/arrow_right.png" : "/images/arrow_right_grey.png";
+            twitter.setEnabled(true);
             facebook.setEnabled(webView.url.indexOf("facebook.com") == -1);
             facebook.image = facebook.enabled? "/images/facebook_icon.png" : "/images/facebook_icon_grey.png";
+            line.setEnabled(true);
         };
         webView.addEventListener('load', loadFunc);
     
+        // twitterボタン
+        twitter.addEventListener("click", function(e){
+            if(twitterInstalled) {
+                sendToApp("com.twitter.android", "com.twitter.android.PostActivity");
+            } else {
+                alert("Twitterアプリをインストールしてください");
+            }
+        });
         // facebookボタン
         facebook.addEventListener("click", function(e){
+            if(facebookInstalled) {
+                sendToApp("com.facebook.katana", "com.facebook.katana.ShareLinkActivity");
+            } else {
+                alert("Facebookアプリをインストールしてください");
+            }
+/*
             if(!Ti.Facebook.loggedIn) {
                 // ログイン済みでない場合はログインする
                 Ti.Facebook.appid = '130375583795842';
@@ -189,16 +183,20 @@ function WebWindow(webData) {
             } else {
                 facebookShare();
             }
+            */
         });
-        var toolbar = Ti.UI.createView({
-            // グラデーションはエラーになるのでイメージで対応
-            // https://jira.appcelerator.org/browse/TIMOB-9819
-            backgroundImage: "/images/toolbarBackground.png"
-            ,backgroundRepeat: true
-            ,width: Ti.UI.FILL
-            ,height: 46
-            ,bottom: 0
+        // LINEボタン
+        line.addEventListener("click", function(e){
+            if(lineInstalled) {
+                sendToApp("jp.naver.line.android", "jp.naver.line.android.activity.selectchat.SelectChatActivity");
+            } else {
+                alert("LINEアプリをインストールしてください");
+            }
         });
+        
+        var toolbar = Ti.UI.createView(style.webWindow.toolbar);
+        toolbar.add(line);
+        toolbar.add(twitter);
         toolbar.add(facebook);
         toolbar.add(back);
         toolbar.add(forward);
@@ -244,6 +242,28 @@ function WebWindow(webData) {
                 }
             }
         );
+    }
+    
+    /**
+     * Twitter/Facebook/LINEの公式アプリにテキストを引き渡す。
+     */
+    function sendToApp(packageName, activityName) {
+        var intent = Ti.Android.createIntent({
+             action: Ti.Android.ACTION_SEND,
+             packageName: packageName,
+             className: activityName,
+             flags: Ti.Android.FLAG_ACTIVITY_NEW_TASK,
+             type: "text/plain"
+         });
+         var text;
+         if(webView.url.indexOf("file://") != 0) {
+             text = title + " " + webView.url;
+         } else {
+             text = title + " " + webData.link;
+         }
+         intent.putExtra(Ti.Android.EXTRA_TEXT, text); //twitter supports any kind of string content (link, text, etc)
+         Ti.Android.currentActivity.startActivity(intent);
+
     }
 
 	return self;
