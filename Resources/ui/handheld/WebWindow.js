@@ -125,7 +125,7 @@ function WebWindow(webData) {
         
         // WebViewロード時、戻るボタン、次へボタンの有効化、無効化
         var loadFunc = function(e) {
-            webView.scalesPageToFit = true;
+//            webView.scalesPageToFit = true;
             if(e.url.indexOf("http") == 0) {
                 title = webView.evalJS("document.title");
                 shortTitle = title;
@@ -153,6 +153,7 @@ function WebWindow(webData) {
         // twitterボタン
         twitter.addEventListener("click", function(e){
             if(twitterInstalled) {
+                Ti.App.Analytics.trackPageview('/tweetDialog');
                 sendToApp("com.twitter.android", "com.twitter.android.PostActivity");
             } else {
                 alert("Twitterアプリをインストールしてください");
@@ -161,7 +162,9 @@ function WebWindow(webData) {
         // facebookボタン
         facebook.addEventListener("click", function(e){
             if(facebookInstalled) {
-                sendToApp("com.facebook.katana", "com.facebook.katana.ShareLinkActivity");
+                Ti.App.Analytics.trackPageview('/fbShareDialog');
+                //sendToApp("com.facebook.katana", "com.facebook.katana.ShareLinkActivity");
+                sendToApp("com.facebook.katana", null);
             } else {
                 alert("Facebookアプリをインストールしてください");
             }
@@ -188,6 +191,7 @@ function WebWindow(webData) {
         // LINEボタン
         line.addEventListener("click", function(e){
             if(lineInstalled) {
+                Ti.App.Analytics.trackPageview('/lineSendDialog');
                 sendToApp("jp.naver.line.android", "jp.naver.line.android.activity.selectchat.SelectChatActivity");
             } else {
                 alert("LINEアプリをインストールしてください");
@@ -246,26 +250,29 @@ function WebWindow(webData) {
     
     /**
      * Twitter/Facebook/LINEの公式アプリにテキストを引き渡す。
+     * @packageName
+     * @activityClassName
      */
-    function sendToApp(packageName, activityName) {
+    function sendToApp(packageName, activityClassName) {
         var intent = Ti.Android.createIntent({
              action: Ti.Android.ACTION_SEND,
              packageName: packageName,
-             className: activityName,
+             className: activityClassName,
              flags: Ti.Android.FLAG_ACTIVITY_NEW_TASK,
              type: "text/plain"
          });
          var text;
-         if(webView.url.indexOf("file://") != 0) {
+//         if(webView.url && webView.url.indexOf("file://") != 0) {
+         if(!webView.html) {
              text = title + " " + webView.url;
          } else {
              text = title + " " + webData.link;
          }
          intent.putExtra(Ti.Android.EXTRA_TEXT, text); //twitter supports any kind of string content (link, text, etc)
-         Ti.Android.currentActivity.startActivity(intent);
-
+         Ti.Android.currentActivity.startActivityForResult(intent, function(e) {
+             Ti.API.info(packageName + ' >>>>>>>>>>>>>>>> e.resultCode = ' + e.resultCode);
+         });
     }
-
 	return self;
 };
 module.exports = WebWindow;

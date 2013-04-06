@@ -67,7 +67,7 @@ text: '更新'
 					tableView.setData(rowsData.slice(1));                    Ti.API.info('---- setData OK');
                     Ti.API.info('rowIdx=' + rowIdx);
                     if(4 < rowIdx) {
-                        tableView.scrollToIndex(rowIdx);
+                        tableView.scrollToIndex(rowIdx - 2);
                     }
 				} catch(e) {
 				    Ti.API.debug("エラー");

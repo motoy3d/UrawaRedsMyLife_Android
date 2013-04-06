@@ -381,7 +381,7 @@ exports.style = {
             ,enabled: false
             ,height: 36
             ,top: 5
-            ,right: 85  
+            ,right: 75  
 	    },
 	    forwardButton : {
             image: "/images/arrow_right_grey.png"
@@ -393,13 +393,22 @@ exports.style = {
             ,top: 5
             ,right: 10
 	    },
-	    twitterButton : {
-            image: "/images/twitter_icon2.png"
+        lineButton : {
+            image: "/images/line_icon.png"
             ,enabled: false
             ,backgroundColor: 'transparent'
-            ,height: 36
-            ,top: 5
-            ,left: 90	        
+            ,height: 40
+            ,left: 5
+        },
+	    twitterButton : {
+            image: "/images/twitter_icon.png"
+            //なぜかずれるのでグローなし
+//            ,backgroundSelectedImage: "/images/twitter_icon_glow.png"
+            ,enabled: false
+            ,backgroundColor: 'transparent'
+//            ,width: 45  //40でいいはずだが、なぜか切れる
+            ,height: 40
+            ,left: 80
 	    },
         facebookButton : {
             image: "/images/facebook_icon_grey.png"
@@ -407,17 +416,8 @@ exports.style = {
             ,enabled: false
             ,backgroundColor: 'transparent'
             // ,width: 40
-            ,height: 36
-            ,top: 5
-            ,right: 150
-        },
-        lineButton : {
-            image: "/images/line_icon.png"
-            ,enabled: false
-            ,backgroundColor: 'transparent'
-            ,height: 36
-            ,top: 5
-            ,left: 10
+            ,height: 40
+            ,left: 130
         },
         toolbar : {
             /* グラデーションはエラーになるのでイメージで対応
