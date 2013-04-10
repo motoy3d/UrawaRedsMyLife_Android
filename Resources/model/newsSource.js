@@ -1,5 +1,5 @@
 var util = require("/util/util").util;
-var siteNameMaxLength = 14;
+var siteNameMaxByteLength = 28;
 var sites = new Array();
 var idx = 0;
 sites[idx++] = new Array("浦和レッズオフィシャル","http://www.urawa-reds.co.jp");
@@ -55,8 +55,6 @@ exports.optimizeSiteName = function(siteName) {
     siteName = util.replaceAll(siteName, "Powered by Ameba", "");
     siteName = util.replaceAll(siteName, "浦和レッドダイヤモンズ", "浦和レッズ");
     siteName = unescape(siteName);
-	if(siteName.length > siteNameMaxLength) {
-		siteName = siteName.substring(0, siteNameMaxLength) + "...";
-	}
+    siteName = util.cutToByteLength(siteName, siteNameMaxByteLength);
 	return siteName;
 };

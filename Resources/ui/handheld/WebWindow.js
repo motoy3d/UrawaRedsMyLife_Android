@@ -145,7 +145,8 @@ function WebWindow(webData) {
             forward.image = forward.enabled? "/images/arrow_right.png" : "/images/arrow_right_grey.png";
             twitter.setEnabled(true);
             facebook.setEnabled(webView.url.indexOf("facebook.com") == -1);
-            facebook.image = facebook.enabled? "/images/facebook_icon.png" : "/images/facebook_icon_grey.png";
+//            facebook.image = facebook.enabled? "/images/facebook_icon.png" : "/images/facebook_icon_grey.png";
+            facebook.image = "/images/facebook_icon.png";
             line.setEnabled(true);
         };
         webView.addEventListener('load', loadFunc);

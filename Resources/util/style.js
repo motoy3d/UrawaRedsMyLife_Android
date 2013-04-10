@@ -397,7 +397,7 @@ exports.style = {
             image: "/images/line_icon.png"
             ,enabled: false
             ,backgroundColor: 'transparent'
-            ,height: 40
+//            ,height: 40
             ,left: 5
         },
 	    twitterButton : {
@@ -408,12 +408,12 @@ exports.style = {
             ,backgroundColor: 'transparent'
 //            ,width: 45  //40でいいはずだが、なぜか切れる
             ,height: 40
-            ,left: 80
+            ,left: 78
 	    },
         facebookButton : {
-            image: "/images/facebook_icon_grey.png"
-            ,backgroundSelectedImage: "/images/facebook_icon_grow.png"
-            ,enabled: false
+//            image: "/images/facebook_icon_grey.png"
+//            ,backgroundSelectedImage: "/images/facebook_icon_grow.png"
+            enabled: false
             ,backgroundColor: 'transparent'
             // ,width: 40
             ,height: 40

@@ -190,8 +190,22 @@ function createNewsRow(item) {
             }
         }
     }
-	// タイトルラベル
+    // タイトルラベル
 	var titleLabel = Ti.UI.createLabel(style.news.titleLabel);
+    var siteNameLabel = Ti.UI.createLabel(style.news.siteNameLabel);
+    var platformHeight = Ti.Platform.displayCaps.platformHeight;
+	if(platformHeight < 640) {  //hdpiとする
+	    titleLabel.font = {fontSize: 16};
+        siteNameLabel.font = {fontSize: 14};
+	}
+    else if(platformHeight == 640) {  //xhdpiとする
+        titleLabel.font = {fontSize: 18};        
+        siteNameLabel.font = {fontSize: 16};
+    }
+    else if(platformHeight > 640) {  //xxhdpiとする？ 1920だと密度3.0で割ると640になってしまうので、これではだめ。
+        titleLabel.font = {fontSize: 20};
+        siteNameLabel.font = {fontSize: 18};
+    }
 	if(hasImage) {
 	    titleLabel.left = titleLabel.left + imgLabel.width + 10;
 	}
@@ -217,7 +231,7 @@ function createNewsRow(item) {
 	
 	// サイト名+更新日時ラベル
 	var link = "";
-	Ti.API.info("★" + idobj[oid].toString());
+	Ti.API.info("★idobj[oid].toString() = " + idobj[oid].toString());
 	if(idobj[oid] && idobj[oid].toString().indexOf("http") == 0) {
 		link = idobj[oid].toString();
 		if(link.indexOf("http://www.google.com/url") == 0) {
@@ -225,7 +239,7 @@ function createNewsRow(item) {
 			link = link.substring(link.indexOf("q=")+2, link.indexOf("&ct="));
 		}
 		Ti.API.info("リンク1====" + link);
-	} else if(item.link instanceof Array) {
+	} else if(item.link.join) {    //joinがあるかどうかで配列であると判定
 		var linkLen = item.link.length;
 		for(var i=0; i<linkLen; i++) {
 			link = item.link[i].href;
@@ -257,7 +271,6 @@ function createNewsRow(item) {
 		fullSiteName = siteName;
 		Ti.API.info("   UrawaReds. siteName====" + siteName + ", link=" + link);
 	}
-	var siteNameLabel = Ti.UI.createLabel(style.news.siteNameLabel);
     if(hasImage) {
 //        siteNameLabel.left = siteNameLabel.left + imgLabel.width + 10;
     }

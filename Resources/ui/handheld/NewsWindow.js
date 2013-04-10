@@ -299,9 +299,6 @@ function NewsWindow(tabGroup) {
         						var scrollToIdx = table.data[0].rows.length;
         						if(rowsData) {
                                     for(i=0; i<rowsData.length; i++) {
-                                        if(i == 0) {
-                                            //indWin.close();
-                                        }
                                         Ti.API.debug("appendRow. " + i + "  " + rowsData[i].children[0].text);
                                         table.appendRow(rowsData[i]);
                                     }

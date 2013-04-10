@@ -109,10 +109,7 @@ function TwitterWindow(tabGroup, target) {
             loadingRowIdx = table.data[0].rows.length - 1;
         }
         twitter.loadTweets(kind, {
-            setNextPageParam: function(nextPageParam) {
-                //TODO?
-            }
-            ,success: function(tweetList) {
+            success: function(tweetList) {
                 try {
                     Ti.API.info('### TwitterWindow.js --- success. tweetList.length=' + tweetList.length);
                     var rows = new Array();
@@ -238,9 +235,7 @@ function TwitterWindow(tabGroup, target) {
                 if(!updating) { //念のため再度チェック
                     Ti.API.info("-----アップデート開始:" + (new Date()).getTime());
                     updating = true;
-    //                loadTweets(nextPageParam, 'olderTweets');
                     beginUpdate();
-                    //updating = false; //loadTweets()中のYQL(非同期)処理終了時に実行
                 }
             }
         }
