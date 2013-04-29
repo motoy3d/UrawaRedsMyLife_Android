@@ -124,15 +124,16 @@ function Results(resultsWindow) {
             if("◯" == result) {
                 resultImage = "/images/win.png";
             } else if("●" == result) {
-                if(isHome) {
-                    if(tdList[5].a.span) {
-                        resultImage = "/images/lose.png";
-                    } else {
-                        resultImage = "/images/win.png";
-                    }
-                } else {
-                    resultImage = "/images/lose.png";
-                }
+                // if(isHome) {
+                    // if(tdList[5].a.span) {
+                        // resultImage = "/images/lose.png";
+                    // } else {
+                        // resultImage = "/images/win.png";
+                    // }
+                // } else {
+                    // resultImage = "/images/lose.png";
+                // }
+                resultImage = "/images/lose.png";
             } else {
                 resultImage = "/images/draw.png";
             }

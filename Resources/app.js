@@ -12,28 +12,39 @@
 
 // This is a single context application with mutliple windows in a stack
 (function() {
+    Ti.include('util/analytics.js');
+    startAnalytics();
+    initDB();
     //determine platform and form factor and render approproate components
     var osname = Ti.Platform.osname,
         version = Ti.Platform.version,
+        apiLevel = Ti.Platform.Android.API_LEVEL,
+        model = Ti.Platform.model,
+        name = Ti.Platform.name,
         height = Ti.Platform.displayCaps.platformHeight,
-        width = Ti.Platform.displayCaps.platformWidth;
+        width = Ti.Platform.displayCaps.platformWidth
+        density = Ti.Platform.displayCaps.density,
+        dpi = Ti.Platform.displayCaps.dpi,
+        xdpi = Ti.Platform.displayCaps.xdpi,
+        ydpi = Ti.Platform.displayCaps.ydpi;
     Ti.API.info('★★osname=' + osname);
     Ti.API.info('★★version=' + version);
-    Ti.API.info('★★Android API_LEVEL = ' + Ti.Platform.Android.API_LEVEL);
+    Ti.API.info('★★Android API_LEVEL = ' + apiLevel);
+    Ti.API.info('★★name=' + name);
+    Ti.API.info('★★model=' + model);
     Ti.API.info('★★width=' + width);
     Ti.API.info('★★height=' + height);
-    Ti.API.info('★★density=' + Ti.Platform.displayCaps.density);
-    Ti.API.info('★★dpi=' + Ti.Platform.displayCaps.dpi);
-    Ti.API.info('★★xdpi=' + Ti.Platform.displayCaps.xdpi);
-    Ti.API.info('★★ydpi=' + Ti.Platform.displayCaps.ydpi);
+    Ti.API.info('★★density=' + density);
+    Ti.API.info('★★dpi=' + dpi);
+    Ti.API.info('★★xdpi=' +xdpi);
+    Ti.API.info('★★ydpi=' + ydpi);
+    Ti.App.Analytics.trackPageview("/startApp?m=" + model + "&v=" + version 
+        + "&wh=" + width + "x" + height + "&dpi=" + dpi + "&density=" + density);
 
     if(Ti.Platform.Android.API_LEVEL > 9) {
         disablePolicy();
     }
 
-	Ti.include('util/analytics.js');
-	startAnalytics();
-	initDB();
 //    checkAppInstalled();
 	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
 	//yourself what you consider a tablet form factor for android
