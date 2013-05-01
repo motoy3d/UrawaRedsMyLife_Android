@@ -408,7 +408,7 @@ exports.style = {
             ,backgroundColor: 'transparent'
 //            ,width: 45  //40でいいはずだが、なぜか切れる
             ,height: 40
-            ,left: 78
+            ,left: 70
 	    },
         facebookButton : {
 //            image: "/images/facebook_icon_grey.png"
@@ -417,7 +417,7 @@ exports.style = {
             ,backgroundColor: 'transparent'
             // ,width: 40
             ,height: 40
-            ,left: 130
+            ,left: 119
         },
         toolbar : {
             /* グラデーションはエラーになるのでイメージで対応
