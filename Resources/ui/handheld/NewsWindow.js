@@ -20,6 +20,7 @@ function NewsWindow(tabGroup) {
 	var style = require("/util/style").style;
     var customIndicator = require("/util/CustomIndicator").customIndicator;
 	var news = new News();
+	var isOpeningNews = false;
 
     var indWin = customIndicator.create();
 
@@ -274,9 +275,9 @@ function NewsWindow(tabGroup) {
     		//alert('loadFeed : ' + news + ", kind=" + kind);
             //alert(news.loadNewsFeed);
     		news.loadNewsFeed(
-    		    kind, news.continuation, news.newest_item_timestamp,  
+			    kind, news.newest_item_timestamp, news.oldest_item_timestamp,
     		    { //callback
-        			success: function(rowsData, newest_item_timestamp) {
+        			success: function(rowsData, newest_item_timestamp, oldest_item_timestamp) {
         				try {
         					// 読み込み中Row削除
     //    					loadingInd.hide();
@@ -287,7 +288,8 @@ function NewsWindow(tabGroup) {
                                 self.add(table);
                                 if(rowsData) {
                                     table.setData(rowsData);
-                                    news.newest_item_timestamp = newest_item_timestamp;
+	                                news.newest_item_timestamp = newest_item_timestamp;
+    	                            news.oldest_item_timestamp = oldest_item_timestamp;
                                 }
                                 //indicator.hide();
                                 indWin.close();
@@ -298,10 +300,12 @@ function NewsWindow(tabGroup) {
                                 lastRow = table.data[0].rows.length - 1;
         						var scrollToIdx = table.data[0].rows.length;
         						if(rowsData) {
-                                    for(i=0; i<rowsData.length; i++) {
+        							var len = rowsData.length;
+                                    for(i=0; i<len; i++) {
                                         Ti.API.debug("appendRow. " + i + "  " + rowsData[i].children[0].text);
                                         table.appendRow(rowsData[i]);
                                     }
+                                    news.oldest_item_timestamp = oldest_item_timestamp;
         						}
         						Ti.API.debug("読み込み中Row削除：" + lastRow);
         						table.deleteRow(lastRow);
@@ -344,22 +348,6 @@ function NewsWindow(tabGroup) {
         			}
         		}
     		);
-    		if('firstTime' == kind || 'olderEntries' == kind) {
-                // continuation取得
-                news.getContinuation(news.continuation, {
-                    success: function(continuation) {
-                        news.continuation = continuation;
-                    },
-                    fail: function(message) {
-                        Ti.API.error('NewsWindow.js  continuation取得失敗 [' + message + ']');
-                        var dialog = Ti.UI.createAlertDialog({
-                            message: message,
-                            buttonNames: ['OK']
-                        });
-                        dialog.show();
-                    }
-                });
-    		}
     	}
 //openイベント
 self.addEventListener('open', function(e) {

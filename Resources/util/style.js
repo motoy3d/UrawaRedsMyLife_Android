@@ -46,11 +46,25 @@ exports.style = {
 			left : 0,
 			right : 4
 		},
+        // imgView : {
+            // width: 80,
+            // top : 10,
+            // bottom : 10,
+            // left : 4
+        // },
         imgView : {
+            width: Ti.UI.SIZE,
+            // height: 96,
+            // top : 10,
+            // left : 4,
+            hires: true
+        },
+        imgViewContainer : {
             width: 80,
+            height: 80,
             top : 10,
-            bottom : 10,
-            left : 4
+            left : 4,
+            hires: true
         },
 		siteNameLabel : {
 			color : "#909090",

@@ -1,6 +1,9 @@
-android/alias=motoy3d
-android/keystore=/Users/motoy3d/Documents/TitaniumStudioWorkspace/UrawaRedsMyLife for Android github/Android/motoy3d.android.keystore
-android/output_location=/Users/motoy3d/Documents/TitaniumStudioWorkspace/UrawaRedsMyLife for Android github/Android
+android/ATTR_PROJECT_NAME=UrawaRedsMyLife for Android github
+android/abi=armeabi
+android/distribute_path=/Users/motoy3d/Documents/TitaniumStudioWorkspace/UrawaRedsMyLife for Android github/Android
+android/keystore_alias=motoy3d
+android/keystore_password=eita0716
+android/keystore_path=/Users/motoy3d/Documents/TitaniumStudioWorkspace/UrawaRedsMyLife for Android github/Android/motoy3d.android.keystore
 android/recent_output=/Users/motoy3d/Documents/TitaniumStudioWorkspace/UrawaRedsMyLife for Android github/Android
-android/sdk=Google APIs Android 4.1.2
+android/sdk_version=Google APIs (Android 2.3.3)
 eclipse.preferences.version=1

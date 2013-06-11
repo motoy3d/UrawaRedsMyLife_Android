@@ -4,16 +4,17 @@
     <property name="ti.android.fastdev" type="bool">false</property>
     <property name="ti.android.bug2373.finishfalseroot" type="bool">true</property>
     <deployment-targets>
+        <target device="tizen">false</target>
         <target device="mobileweb">false</target>
         <target device="iphone">false</target>
         <target device="ipad">false</target>
         <target device="android">true</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>2.1.4.GA</sdk-version>
+    <sdk-version>3.1.0.GA</sdk-version>
     <id>org.with.urawa.reds</id>
     <name>RedsMyLife</name>
-    <version>1.2.8</version>
+    <version>1.2.9</version>
     <publisher>Motoi Kataoka</publisher>
     <url>http://motoy3d.blogspot.com</url>
     <description>for all Urawa Reds Supporter</description>
@@ -32,7 +33,7 @@
     <android xmlns:android="http://schemas.android.com/apk/res/android">
         <tool-api-level>10</tool-api-level>
         <manifest android:installLocation="auto"
-            android:versionCode="17" android:versionName="1.2.8">
+            android:versionCode="18" android:versionName="1.2.9">
             <uses-sdk android:minSdkVersion="10"/>
             <!-- Android 2.3.3 -->
             <supports-screens android:anyDensity="false"/>
