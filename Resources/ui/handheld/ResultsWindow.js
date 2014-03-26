@@ -56,10 +56,10 @@ text: '更新'
 				try {
 				    var rowIdx = 0;
 				    for(i=1; i<rowsData.length; i++) {
-				        if(rowsData[i].detailUrl) {
+				        if(rowsData[i] && rowsData[i].detailUrl) {
 				            rowIdx = i-1;   //最初の１行目は除くため-1
 				        } else {
-				            break;
+				            continue;
 				        }
 				    }
 				    Ti.API.info('---- add tableView');

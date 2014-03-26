@@ -72,6 +72,9 @@ function Results(resultsWindow) {
         if("大会/節" == compe) {
             return null;
         }
+        if(!tdList[1]) {  //日付が空。無観客試合特例
+            return null;
+        }
         var isHome = false;
         var cls = "class";  //classは予約語
         if(item[cls]) {
@@ -121,21 +124,16 @@ function Results(resultsWindow) {
                 score = tdList[5].a.content.substring(1);
             }
             detailUrl = tdList[5].a.href;
-            if("◯" == result) {
+            var divIdx = score.indexOf("-");
+            var score1 = Number(score.substring(0, divIdx));
+            var score2 = Number(score.substring(divIdx+1));
+//          Ti.API.info(team + ' スコア ' + score1 + "-" + score2);
+            if(score2 < score1) {
                 resultImage = "/images/win.png";
-            } else if("●" == result) {
-                // if(isHome) {
-                    // if(tdList[5].a.span) {
-                        // resultImage = "/images/lose.png";
-                    // } else {
-                        // resultImage = "/images/win.png";
-                    // }
-                // } else {
-                    // resultImage = "/images/lose.png";
-                // }
-                resultImage = "/images/lose.png";
-            } else {
+            } else if(score1 == score2) {
                 resultImage = "/images/draw.png";
+            } else {
+                resultImage = "/images/lose.png";
             }
         }
         var hasDetailResult = detailUrl != "";

@@ -254,6 +254,17 @@ exports.style = {
             ,color: 'white'
             ,backgroundColor: 'black'	        
 	    },
+        sortButton : {
+            title: "ソート"
+            ,color: "white"
+            ,borderColor: "#902020"
+            ,borderWidth: 1
+            ,backgroundImage: "/images/toolbarBackground.png"
+            ,borderRadius: 8
+            ,height: 36
+            ,width: 100
+//            ,top: 5
+        },
 	    j1Button : {
             title: "J1"
             ,color: "lightgray"

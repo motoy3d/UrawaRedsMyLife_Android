@@ -26,7 +26,7 @@ function NewsWindow(tabGroup) {
 
     // ウィンドウ
 	var self = Ti.UI.createWindow({
-		title: L('news')
+		title: "ニュース"
 		,backgroundColor: 'black'
 	});
     //TODO 更新ボタン---------------------------------------

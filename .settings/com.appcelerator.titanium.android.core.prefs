@@ -1,0 +1,10 @@
+android/ATTR_MINIFY=true
+android/ATTR_PROJECT_NAME=UrawaRedsMyLife for Android github
+android/abi=armeabi-v7a
+android/distribute_path=/Users/motoy3d/Documents/TitaniumStudioWorkspace/UrawaRedsMyLife for Android github/Android
+android/keystore_alias=motoy3d
+android/keystore_password=eita0716
+android/keystore_path=/Users/motoy3d/Documents/TitaniumStudioWorkspace/UrawaRedsMyLife for Android github/Android/motoy3d.android.keystore
+android/recent_output=/Users/motoy3d/Documents/TitaniumStudioWorkspace/UrawaRedsMyLife for Android github/Android
+android/sdk_version=4.1.2
+eclipse.preferences.version=1

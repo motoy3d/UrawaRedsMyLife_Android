@@ -5,7 +5,10 @@ function ApplicationTabGroup() {
 	var TwitterWindow = require('ui/handheld/TwitterWindow');
 
 	//create module instance
-	var self = Ti.UI.createTabGroup({barColor : 'red'});
+	var self = Ti.UI.createTabGroup({
+	    barColor : 'red'
+	    ,navBarHidden: true
+	    });
 	
 	//create app tabs
 	var win1 = new NewsWindow(self)
@@ -16,34 +19,29 @@ function ApplicationTabGroup() {
 		;
 	// ニュース
 	var tab1 = Ti.UI.createTab({
-		title: L('news'),
 		icon: '/images/news.png',
 		window: win1
 	});
 	// 日程・結果
 	var tab2 = Ti.UI.createTab({
-		title: L('results'),
 		icon: '/images/game.png',
 		window: win2
 	});
 	win2.containingTab = tab2;
 	// 順位表
 	var tab3 = Ti.UI.createTab({
-		title: L('standings'),
 		icon: '/images/standings.png',
 		window: win3
 	});
 	win3.containingTab = tab3;
 	// twitter
 	var tab4 = Ti.UI.createTab({
-		title: L('twitter'),
 		icon: '/images/twitter.png',
 		window: win4
 	});
 	win4.containingTab = tab4;
     // player twitter
     var tab5 = Ti.UI.createTab({
-        title: L('playerTweets'),
         icon: '/images/playerTweet.png',
         window: win5
     });

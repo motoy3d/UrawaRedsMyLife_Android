@@ -7,6 +7,7 @@ function StandingsWindow(tabGroup) {
 	// var util = require("/util/util").util;
 	var style = require("/util/style").style;
     var customIndicator = require("/util/CustomIndicator").customIndicator;
+    var isLoading = false;
 
     //TODO 更新ボタン
     var refreshButton = Ti.UI.createButton({
@@ -35,7 +36,7 @@ function StandingsWindow(tabGroup) {
     var j1HeaderView;
     var aclHeaderView;
     var table;
-    var toolbar = createToolbar();
+    var toolbar = createToolbar2();
     self.add(toolbar);
 
     // リロードボタン
@@ -48,8 +49,9 @@ function StandingsWindow(tabGroup) {
     Ti.API.info('★画面横幅：' + Ti.Platform.displayCaps.platformWidth);
     
     /**
-     * ツールバーを生成する。
+     * J1/ACL ツールバーを生成する。
      */
+/*
     function createToolbar() {
         var platformWidth = Ti.Platform.displayCaps.platformWidth;
         var j1Left  = (platformWidth - 200) / 2 - 5;
@@ -97,7 +99,60 @@ function StandingsWindow(tabGroup) {
         toolbar.add(acl);
         return toolbar;
     }
-    
+*/
+    /**
+     * ソートボタン ツールバーを生成する。
+     */
+    function createToolbar2() {
+        var platformWidth = Ti.Platform.displayCaps.platformWidth;
+//        var left  = (platformWidth - 300) / 2 - 5;
+        var sortBtn = Ti.UI.createButton(style.standings.sortButton);
+//        sortBtn.left = left;
+        // ソートボタン
+        sortBtn.addEventListener('click', function(e){
+            if(isLoading) {
+                return;
+            }
+            
+            var optionsArray = new Array("得点数でソート", "失点数でソート", "得失点差でソート", 
+                "勝利数でソート", "敗北数でソート", "引き分け数でソート", "順位でソート", "キャンセル");
+            var sortDialog = Ti.UI.createOptionDialog({options: optionsArray});
+            sortDialog.addEventListener("click", function(e){
+                if(7 == e.index) {
+                    return;
+                }
+                if(0 == e.index) {
+                    loadJ1Standings("gotGoal");
+                } else if(1 == e.index) {
+                    loadJ1Standings("lostGoal");
+                } else if(2 == e.index) {
+                    loadJ1Standings("diff");
+                } else if(3 == e.index) {
+                    loadJ1Standings("win");
+                } else if(4 == e.index) {
+                    loadJ1Standings("lost");
+                } else if(5 == e.index) {
+                    loadJ1Standings("draw");
+                } else if(6 == e.index) {
+                    loadJ1Standings();
+                }
+            });
+            sortDialog.show();
+        });
+
+        var toolbar = Ti.UI.createView({
+            // グラデーションはエラーになるのでイメージで対応
+            // https://jira.appcelerator.org/browse/TIMOB-9819
+            backgroundImage: "/images/toolbarBackground.png"
+            ,backgroundRepeat: true
+            ,width: Ti.UI.FILL
+            ,height: 46
+            ,bottom: 0
+        });
+        toolbar.add(sortBtn);
+        return toolbar;
+    }
+
     /**
      * ヘッダービューを生成する 
      */
@@ -133,8 +188,10 @@ function StandingsWindow(tabGroup) {
 	/**
 	 * Yahooスポーツサイトのhtmlを読み込んで表示する
 	 */
-	function loadJ1Standings() {
+	function loadJ1Standings(sort) {
+	    Ti.API.info('インジケータOPEN');
 		indWin.open({modal: true});
+		isLoading = true;
         //ヘッダー
         // if(aclHeaderView) {
             // containerView.remove(aclHeaderView);
@@ -144,9 +201,8 @@ function StandingsWindow(tabGroup) {
         // // ボーダー
         // var border = Ti.UI.createLabel(style.standings.border);
         // containerView.add(border);
-
 		var standings = new Standings();
-		standings.load({
+		standings.load(sort, {
 			success: function(standingsDataList) {
 				try {
 				    var rows = new Array();
@@ -172,13 +228,15 @@ function StandingsWindow(tabGroup) {
 				} catch(e) {
 					Ti.API.error(e);
 				} finally {
-					//indicator.hide();
+					Ti.API.info('インジケータCLOSE');
 					indWin.close();
+					isLoading = false;
 				}
 			},
 			fail: function(message) {
-				//indicator.hide();
+				Ti.API.info('インジケータCLOSE');
 				indWin.close();
+				isLoading = false;
 				var dialog = Ti.UI.createAlertDialog({
 					message: message,
 					buttonNames: ['OK']
@@ -192,6 +250,7 @@ function StandingsWindow(tabGroup) {
      */
     function loadACLStandings() {
         indWin.open({modal: true});
+        isLoading = true;
 //        compeButtonBar.setLabels([{title: 'J1', enabled: true}, {title: 'ACL', enabled: false}]);
         // // ヘッダー
         // if(j1HeaderView) {
@@ -204,7 +263,7 @@ function StandingsWindow(tabGroup) {
         // containerView.add(border);
 
         var standings = new ACLStandings();
-        standings.load({
+        standings.load(sort, {
             success: function(standingsDataList) {
                 try {
                     var rows = new Array();
@@ -232,10 +291,12 @@ function StandingsWindow(tabGroup) {
                     Ti.API.error(e);
                 } finally {
                     indWin.close();
+                    isLoading = false;
                 }
             },
             fail: function(message) {
                 indWin.close();
+                isLoading = false;
                 var dialog = Ti.UI.createAlertDialog({
                     message: message,
                     buttonNames: ['OK']
