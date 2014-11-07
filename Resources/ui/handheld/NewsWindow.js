@@ -10,8 +10,8 @@ function NewsWindow(tabGroup) {
     // 自前モジュールによりStrictModeを回避
     var androidignorestrictmode = require('motoy3d.android.ignore.strictmode');
     Ti.API.info("自前モジュール => " + androidignorestrictmode);
-    var _result = androidignorestrictmode.disablePolicy();
-    Ti.API.info('結果： ' + _result);    
+    //var _result = androidignorestrictmode.disablePolicy();
+    //Ti.API.info('結果： ' + _result);    
     
 	var News = require("/model/News");
 	var WebWindow = require("/ui/handheld/WebWindow");

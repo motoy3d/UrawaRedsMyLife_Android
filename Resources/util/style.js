@@ -18,8 +18,9 @@ exports.style = {
         titleBar : {
             width: Ti.UI.FILL
             ,height: 30
-            ,backgroundImage: "/images/toolbarBackground.png"
-            ,backgroundRepeat: true
+//            ,backgroundColor: "/images/toolbarBackground.png"
+//            ,backgroundRepeat: true
+            ,backgroundColor: "red"
             ,color: 'white'
             ,top: 0          
         }
@@ -60,9 +61,10 @@ exports.style = {
             hires: true
         },
         imgViewContainer : {
-            width: 80,
-            height: 80,
+            width: 120,
+            height: 120,
             top : 10,
+            bottom : 10,
             left : 4,
             hires: true
         },
@@ -259,7 +261,8 @@ exports.style = {
             ,color: "white"
             ,borderColor: "#902020"
             ,borderWidth: 1
-            ,backgroundImage: "/images/toolbarBackground.png"
+//            ,backgroundImage: "/images/toolbarBackground.png"
+            ,backgroundColor: "red"
             ,borderRadius: 8
             ,height: 36
             ,width: 100
@@ -271,7 +274,8 @@ exports.style = {
             ,opacity: 0.5
             ,borderColor: "#902020"
             ,borderWidth: 1
-            ,backgroundImage: "/images/toolbarBackground.png"
+//            ,backgroundImage: "/images/toolbarBackground.png"
+            ,backgroundColor: "red"
             ,borderRadius: 8
             ,enabled: false
             ,height: 36
@@ -284,7 +288,22 @@ exports.style = {
             ,opacity: 1.0
             ,borderColor: "#902020"
             ,borderWidth: 1
-            ,backgroundImage: "/images/toolbarBackground.png"
+//            ,backgroundImage: "/images/toolbarBackground.png"
+            ,backgroundColor: "red"
+            ,borderRadius: 8
+            ,enabled: true
+            ,height: 36
+            ,width: 100
+            ,top: 5
+        },
+        nabiscoButton : {
+            title: "ナビスコ"
+            ,color: "white"
+            ,opacity: 1.0
+            ,borderColor: "#902020"
+            ,borderWidth: 1
+//            ,backgroundImage: "/images/toolbarBackground.png"
+            ,backgroundColor: "red"
             ,borderRadius: 8
             ,enabled: true
             ,height: 36
@@ -447,11 +466,12 @@ exports.style = {
         toolbar : {
             /* グラデーションはエラーになるのでイメージで対応
                https://jira.appcelerator.org/browse/TIMOB-9819*/
-            backgroundImage: "/images/toolbarBackground.png"
-            ,backgroundRepeat: true
+//            backgroundImage: "/images/toolbarBackground.png"
+//            ,backgroundRepeat: true
+            backgroundColor: "red"
             ,width: Ti.UI.FILL
             ,height: 46
             ,bottom: 0
         }
 	}
-}
+};

@@ -6,7 +6,7 @@ exports.customIndicator = {
 		var indWin = Ti.UI.createWindow({
 			height:180
 			,width:180
-			,borderRadius:10
+//			,borderRadius:10
 			,navBarHidden: true
 		});
 	 
@@ -15,7 +15,7 @@ exports.customIndicator = {
 			height:176,
 			width:176,
 			backgroundColor: '#202020',
-			borderRadius:20,
+//			borderRadius:20,
 			opacity:0.9,
 			layout:'vertical'
 		});
@@ -48,5 +48,5 @@ exports.customIndicator = {
 		
 		return indWin;
 	}
-}
+};
  

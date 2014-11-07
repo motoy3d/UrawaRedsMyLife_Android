@@ -4,6 +4,7 @@
 function StandingsWindow(tabGroup) {
 	var Standings = require("/model/Standings");
     var ACLStandings = require("/model/ACLStandings");
+    var NabiscoStandings = require("/model/NabiscoStandings");
 	// var util = require("/util/util").util;
 	var style = require("/util/style").style;
     var customIndicator = require("/util/CustomIndicator").customIndicator;
@@ -105,9 +106,9 @@ function StandingsWindow(tabGroup) {
      */
     function createToolbar2() {
         var platformWidth = Ti.Platform.displayCaps.platformWidth;
-//        var left  = (platformWidth - 300) / 2 - 5;
+        var sortLeft  = 20;
         var sortBtn = Ti.UI.createButton(style.standings.sortButton);
-//        sortBtn.left = left;
+        sortBtn.left = sortLeft;
         // ソートボタン
         sortBtn.addEventListener('click', function(e){
             if(isLoading) {
@@ -139,17 +140,52 @@ function StandingsWindow(tabGroup) {
             });
             sortDialog.show();
         });
+        var j1Left  = sortLeft + 110;
+        //J1
+        var j1 = Ti.UI.createButton(style.standings.j1Button);
+        j1.left = j1Left;
+        //ACL / Nabisco
+        var nabisco = Ti.UI.createButton(style.standings.nabiscoButton);
+        nabisco.left = j1Left + 110;
+        
+        j1.addEventListener("click", function(e){
+            if(currentCompeIdx != 0) {
+                currentCompeIdx = 0;
+                j1.enabled = false;
+                j1.color = "lightgray";
+                j1.opacity = 0.5;
+                nabisco.enabled = true;
+                nabisco.color = "white";
+                nabisco.opacity = 1;
+                loadJ1Standings();
+            }
+        });
+        nabisco.addEventListener("click", function(e){
+            if(currentCompeIdx != 1) {
+                currentCompeIdx = 1;
+                j1.enabled = true;
+                j1.color = "white";
+                j1.opacity = 1;
+                nabisco.enabled = false;
+                nabisco.color = "lightgray";
+                nabisco.opacity = 0.5;
+                loadNabiscoStandings();
+            }
+        });
 
         var toolbar = Ti.UI.createView({
             // グラデーションはエラーになるのでイメージで対応
             // https://jira.appcelerator.org/browse/TIMOB-9819
-            backgroundImage: "/images/toolbarBackground.png"
-            ,backgroundRepeat: true
+//            backgroundImage: "/images/toolbarBackground.png"
+//            ,backgroundRepeat: true
+            backgroundColor: "red"
             ,width: Ti.UI.FILL
             ,height: 46
             ,bottom: 0
         });
         toolbar.add(sortBtn);
+        toolbar.add(j1);
+        toolbar.add(nabisco);
         return toolbar;
     }
 
@@ -190,7 +226,7 @@ function StandingsWindow(tabGroup) {
 	 */
 	function loadJ1Standings(sort) {
 	    Ti.API.info('インジケータOPEN');
-		indWin.open({modal: true});
+//		indWin.open({modal: true});
 		isLoading = true;
         //ヘッダー
         // if(aclHeaderView) {
@@ -228,7 +264,7 @@ function StandingsWindow(tabGroup) {
 				} catch(e) {
 					Ti.API.error(e);
 				} finally {
-					Ti.API.info('インジケータCLOSE');
+					Ti.API.info('インジケータCLOSE1');
 					indWin.close();
 					isLoading = false;
 				}
@@ -305,6 +341,70 @@ function StandingsWindow(tabGroup) {
             }
         });
     }
+
+
+    /**
+     * Jリーグ公式サイトサイトのナビスコのhtmlを読み込んで表示する
+     */
+    function loadNabiscoStandings() {
+        indWin.open({modal: true});
+        isLoading = true;
+//        compeButtonBar.setLabels([{title: 'J1', enabled: true}, {title: 'ACL', enabled: false}]);
+        // // ヘッダー
+        // if(j1HeaderView) {
+            // containerView.remove(j1HeaderView);
+        // }
+        // var aclHeaderView = createHeaderView(true);
+        // containerView.add(aclHeaderView);
+        // // ボーダー
+        // var border = Ti.UI.createLabel(style.standings.border);
+        // containerView.add(border);
+
+
+        var standings = new NabiscoStandings();
+        standings.load({
+            success: function(standingsDataList) {
+                try {
+                    var rows = new Array();
+                    for(i=0; i<standingsDataList.length; i++) {
+                        var data = standingsDataList[i];
+                        rows.push(createRow(
+                            data.rank, data.team, data.point, data.win, data.draw, data.lose
+                            , data.gotGoal, data.lostGoal, data.diff, true)
+                        );
+                    }
+                    // ヘッダー
+                    if(j1HeaderView) {
+                        containerView.remove(j1HeaderView);
+                    }
+                    var nabiscoHeaderView = createHeaderView(true);
+                    containerView.add(nabiscoHeaderView);
+                    // ボーダー
+                    var border = Ti.UI.createLabel(style.standings.border);
+                    containerView.add(border);
+                    table = Ti.UI.createTableView(style.standings.table);
+                    table.height = 210;
+                    table.setData(rows);
+                    containerView.add(table);
+                } catch(e) {
+                    Ti.API.error(e);
+                } finally {
+                    indWin.close();
+                    isLoading = false;
+                }
+            },
+            fail: function(message) {
+                indWin.close();
+                isLoading = false;
+                var dialog = Ti.UI.createAlertDialog({
+                    message: message,
+                    buttonNames: ['OK']
+                });
+                dialog.show();
+            }
+        });
+    }
+    
     /**
      * ヘッダーラベルを生成して返す
      */

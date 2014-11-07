@@ -12,7 +12,7 @@
 
 // This is a single context application with mutliple windows in a stack
 (function() {
-    Ti.include('util/analytics.js');
+//    Ti.include('util/analytics.js');
     startAnalytics();
     initDB();
     //determine platform and form factor and render approproate components
@@ -42,7 +42,7 @@
         + "&wh=" + width + "x" + height + "&dpi=" + dpi + "&density=" + density);
 
     if(Ti.Platform.Android.API_LEVEL > 9) {
-        disablePolicy();
+//        disablePolicy();
     }
 
 //    checkAppInstalled();
@@ -75,7 +75,7 @@
 		if ( ( new Date() ).getTime() >= startTime + waitMilliSeconds ) break;
 	}
 //    tabGroup.open({transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT});
-disablePolicy();
+//disablePolicy();
     tabGroup.open();
 
 })();
@@ -102,8 +102,9 @@ function initDB() {
  * Google Analyticsの処理を初期化する
  */
 function startAnalytics() {
+    var Analytics = require('/util/Ti.Google.Analytics');
 	var analytics = new Analytics('UA-30928840-1');
-    var util = require("util/util").util;
+    var util = require("/util/util").util;
 	Titanium.App.addEventListener('analytics_trackPageview', function(e){
         var path = "/app/" + util.getTeamId() + "/" + Ti.Platform.name;
 	    analytics.trackPageview(path + e.pageUrl);
@@ -118,7 +119,7 @@ function startAnalytics() {
 	    trackEvent:function(category, action, label, value){
 	        Ti.App.fireEvent('analytics_trackEvent', {category:category, action:action, label:label, value:value});
 	    }
-	}
+	};
 	analytics.start(10);	//10秒に1回データ送信
 }
 /*
@@ -141,11 +142,11 @@ function checkAppInstalled() {
         Ti.API.info('★★Facebook app not installed.');
     }    
 }*/
-function disablePolicy() {
+/*function disablePolicy() {
     // 自前モジュールによりStrictModeを回避
     var androidignorestrictmode = require('motoy3d.android.ignore.strictmode');
     Ti.API.info("自前モジュール => " + androidignorestrictmode);
     var result = androidignorestrictmode.disablePolicy();
     Ti.API.info('結果： ' + result);   
     Ti.API.info('スレッドポリシー：' + androidignorestrictmode.threadPolicy); 
-}
+}*/

@@ -146,17 +146,16 @@ function createNewsRow(item) {
             var urlEndIdx = content.indexOf('"', urlStartIdx);
             imgUrl = content.substring(urlStartIdx, urlEndIdx);
             imgUrl = util.replaceAll(imgUrl, "&amp;", "&");
-            Ti.API.debug('画像＝＝＝＝＝' + imgUrl + "  >  " + item.title);
+            Ti.API.debug('画像＝＝＝＝＝' + imgUrl + "  >  " + item.entry_title);
             // アイコン等はgifが多いのでスキップ
             if(!util.isUnnecessaryImage(imgUrl)) {
 //TODO Android4.0でエラー？ F-10D実機では問題なし。
-/*                var imgLabel = Ti.UI.createImageView(style.news.imgView);
-                var imgContainer = Ti.UI.createImageView(style.news.imgViewContainer);
+                var imgLabel = Ti.UI.createImageView(style.news.imgView);               
+                var imgContainer = Ti.UI.createView(style.news.imgViewContainer);
                 imgLabel.image = imgUrl;
                 imgContainer.add(imgLabel);
                 row.add(imgContainer);
                 hasImage = true;
-*/
             } else {
                 imgUrl = "";
             }
@@ -180,7 +179,7 @@ function createNewsRow(item) {
         siteNameLabel.font = {fontSize: 18};
     }
 	if(hasImage) {
-	    titleLabel.left = titleLabel.left + imgLabel.width + 10;
+	    rightView.left = titleLabel.left + imgContainer.width + 10;
 	}
 	var itemTitle = util.deleteUnnecessaryText(item.entry_title);
 //	Ti.API.info('itemTitle=' + itemTitle);
@@ -216,7 +215,7 @@ function createNewsRow(item) {
 	}
 	var siteName = newsSource.optimizeSiteName(item.site_name);
 	Ti.API.debug("siteName1====" + siteName + ", link=" + link);
-	if('UrawaReds' == siteName) {
+	if('' == siteName) {
 		siteName = newsSource.getSiteName(link);
 		fullSiteName = siteName;
 		Ti.API.info("   UrawaReds. siteName====" + siteName + ", link=" + link);

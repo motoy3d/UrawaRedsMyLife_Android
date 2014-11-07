@@ -11,10 +11,10 @@
         <target device="android">true</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>3.2.2.GA</sdk-version>
+    <sdk-version>3.2.3.GA</sdk-version>
     <id>org.with.urawa.reds</id>
     <name>RedsMyLife</name>
-    <version>1.3.3</version>
+    <version>1.3.4</version>
     <publisher>Motoi Kataoka</publisher>
     <url>http://motoy3d.blogspot.com</url>
     <description>for all Urawa Reds Supporter</description>
@@ -32,7 +32,10 @@
     <statusbar-style>translucent_black</statusbar-style>
     <android xmlns:android="http://schemas.android.com/apk/res/android">
         <manifest android:installLocation="auto"
-            android:versionCode="22" android:versionName="1.3.3">
+            android:versionCode="23" android:versionName="1.3.4">
+            <!--
+	            <application android:hardwareAccelerated="false" android:theme="@style/Theme.Titanium"/>
+-->
             <application android:hardwareAccelerated="false"/>
             <uses-sdk android:minSdkVersion="10"/>
             <!-- Android 2.3.3 -->

@@ -58,6 +58,8 @@ function YoutubeWindow(searchCond) {
     		var searchTerm1 = searchCond.key1;
             var searchTerm2 = searchCond.key2;
             var searchTerm3 = searchCond.key3;
+            var searchTerm4 = searchCond.key4;
+            var searchTerm5 = searchCond.key5;
             Ti.App.Analytics.trackPageview('/movieList');
     		var replaceKey = '#キーワード#';
     		var searchUrlBase = 'http://gdata.youtube.com/feeds/api/videos?alt=rss&q='
@@ -75,6 +77,14 @@ function YoutubeWindow(searchCond) {
             if(searchTerm3) {
                 searchUrl3 = searchUrlBase.replace(replaceKey, searchTerm3);
             }
+            var searchUrl4 = null;
+            if(searchTerm4) {
+                searchUrl4 = searchUrlBase.replace(replaceKey, searchTerm4);
+            }
+            var searchUrl5 = null;
+            if(searchTerm5) {
+                searchUrl5 = searchUrlBase.replace(replaceKey, searchTerm5);
+            }
     
     		var youtubeFeedQuery = "SELECT title,pubDate,link,statistics.viewCount FROM feed WHERE " 
     			+ "url='" + searchUrl + "'";
@@ -83,6 +93,12 @@ function YoutubeWindow(searchCond) {
     		}
             if(searchUrl3) {
                 youtubeFeedQuery += " or " + "url='" + searchUrl3 + "'";
+            }
+            if(searchUrl4) {
+                youtubeFeedQuery += " or " + "url='" + searchUrl4 + "'";
+            }
+            if(searchUrl5) {
+                youtubeFeedQuery += " or " + "url='" + searchUrl5 + "'";
             }
     		Ti.API.info("■YQL Query........" + youtubeFeedQuery);
 //alert(youtubeFeedQuery);

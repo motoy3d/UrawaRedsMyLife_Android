@@ -35,6 +35,7 @@ function WebWindow(webData) {
     if(!webData.toolbarVisible) { //twitter画面から遷移した場合
         webView.bottom = 0;
     }
+    webView.softKeyboardOnFocus = Ti.UI.Android.SOFT_KEYBOARD_HIDE_ON_FOCUS;
 
     var simpleDispModeProp = Ti.App.Properties.getBool("simpleDispMode");
 	Ti.API.info("##### webData.content=[" + webData.content + "]" + ", webData.link=[" + webData.link + "]");
@@ -155,7 +156,7 @@ function WebWindow(webData) {
         twitter.addEventListener("click", function(e){
             if(twitterInstalled) {
                 Ti.App.Analytics.trackPageview('/tweetDialog');
-                sendToApp("com.twitter.android", "com.twitter.android.PostActivity");
+                sendToApp("com.twitter.android", "com.twitter.applib.composer.TextFirstComposerActivity");
             } else {
                 alert("Twitterアプリをインストールしてください");
             }

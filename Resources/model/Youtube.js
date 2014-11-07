@@ -231,6 +231,7 @@ function createWebView() {
 	webModal.orientationModes = [Ti.UI.PORTRAIT, Ti.UI.LANDSCAPE_LEFT, Ti.UI.LANDSCAPE_RIGHT];
 	webModalView = Ti.UI.createWebView();
 	webModalView.scalesPageToFit = true;
+	webModalView.softKeyboardOnFocus = Ti.UI.Android.SOFT_KEYBOARD_HIDE_ON_FOCUS;
 
 	webModal.add(webModalView);
 	youtubeInd = Ti.UI.createActivityIndicator({
