@@ -6,9 +6,9 @@ function ApplicationTabGroup() {
 
 	//create module instance
 	var self = Ti.UI.createTabGroup({
-	    barColor : 'red'
-	    ,navBarHidden: true
-	    });
+        tabsBackgroundColor: "black"
+        ,activeTabBackgroundColor: "white"
+    });
 	
 	//create app tabs
 	var win1 = new NewsWindow(self)

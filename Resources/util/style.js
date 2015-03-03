@@ -155,7 +155,7 @@ exports.style = {
 			type: 'CONTENT'
 		},
 		dateLabel : {
-			width : 135,
+			width : 150,
 			color : 'lightgray',
 			font : {fontSize : 13},
 			height : 24,
@@ -165,7 +165,7 @@ exports.style = {
 		compeLabel : {
 			color : 'lightgray',
 			font : {fontSize : 13},
-			width : 140,
+			width : 180,
 			height : 24,
 			top : 4,
 			left : 155			
@@ -282,23 +282,8 @@ exports.style = {
             ,width: 100
             ,top: 5
 	    },
-        aclButton : {
-            title: "ACL"
-            ,color: "white"
-            ,opacity: 1.0
-            ,borderColor: "#902020"
-            ,borderWidth: 1
-//            ,backgroundImage: "/images/toolbarBackground.png"
-            ,backgroundColor: "red"
-            ,borderRadius: 8
-            ,enabled: true
-            ,height: 36
-            ,width: 100
-            ,top: 5
-        },
-        nabiscoButton : {
-            title: "ナビスコ"
-            ,color: "white"
+        aclNabiscoButtonAndroid : {
+            color: "white"
             ,opacity: 1.0
             ,borderColor: "#902020"
             ,borderWidth: 1

@@ -1,40 +1,47 @@
 /**
  * 順位表取得サービス
- * Yahoo スポーツから読み込み
  */
-function Standings() {
+function Standings(compe) {
+    var config = require("/config").config;
 	var util = require("/util/util").util;
     var style = require("/util/style").style;
     var XHR = require("/util/xhr");
-
 	var self = {};
 	self.load = load;
-    var standingsUrl = "http://sub0000499082.hmk-temp.com/redsmylife/standings.json?season=" + util.getCurrentSeason();
 
+    var standingsUrl = config.standingsUrl + "?season=" + util.getCurrentSeason() + "&teamId=" + config.teamId;
+    if (!compe) {
+        compe = "J";
+    }
+    standingsUrl += "&compe=" + compe;
+    
 	/**
 	 * 自前サーバからJSONを読み込んで表示する
 	 */
 	function load(sort, callback) {
+        var before = new Date();
 	    Ti.API.info('---------------------------------------------------------------------');
 	    Ti.API.info(util.formatDatetime() + '  順位表読み込み');
         Ti.API.info('---------------------------------------------------------------------');
         
 		// オンラインチェック
 		if(!Ti.Network.online) {
-            callback.fail(style.common.offlineMsg);
-            return;
+            //callback.fail(style.common.offlineMsg);
+            //TODO return;
 		}
-		if(sort) {
+        if(sort) {
             Ti.App.Analytics.trackPageview('/standings?sort=' + sort);
-		} else {
+        } else {
             Ti.App.Analytics.trackPageview('/standings');
-		}
+        }
+
         var xhr = new XHR();
         // Normal plain old request with a 5mins caching
         if(sort){
             standingsUrl += "&sort=" + sort;
         }
-        xhr.get(standingsUrl, onSuccessCallback, onErrorCallback, { ttl: 5 });
+        Ti.API.info('URL=' + standingsUrl);
+        xhr.get(standingsUrl, onSuccessCallback, onErrorCallback, { ttl: 1 });
         function onSuccessCallback(e) {
             // Handle your request in here
             // the module will return an object with two properties
@@ -46,8 +53,9 @@ function Standings() {
                 var month = new Date().getMonth() + 1;
                 if(month == 2) {
                     // 新シーズン開始前
-                    callback.fail(L('waitNewSeasonMsg'));
+                    callback.fail("新シーズンの開幕までお待ちください");
                 } else {
+                    Ti.API.info('xxxxxxxxx e.data is null');
                     callback.fail(style.common.loadingFailMsg);
                 }
                 return;
@@ -59,6 +67,9 @@ function Standings() {
                     var ranking = dataList[i];
                     var rank = ranking.rank;
                     var team = util.getSimpleTeamName(ranking.team_name);
+                    if (!team){
+                        team = ranking.team_name;
+                    }
                     var point = ranking.point;
                     var win = ranking.win;
                     var draw = ranking.draw;
@@ -81,15 +92,21 @@ function Standings() {
                     };
                     standingsDataList.push(standingsData);
                 }
+                Ti.API.info('>>>>>>>>>>> success');
                 callback.success(standingsDataList);
             } catch(ex) {
+                Ti.API.info('>>>>>>>>>>> catch');
                 Ti.API.error('---------------------\n' + ex);   
                 callback.fail(style.common.loadingFailMsg);
             } finally {
+                var after = new Date();
+                Ti.API.info("Standings.js#load() 処理時間★" 
+                    + (after.getTime()-before.getTime())/1000.0 + "秒");
             }
         };
         function onErrorCallback(e) {
             Ti.API.error(e);
+            Ti.API.info('xxxxxxxxx onErrorCallback');
         }
 	}
 	return self;

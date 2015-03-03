@@ -1,20 +1,21 @@
-/*
- * A tabbed application, consisting of multiple stacks of windows associated with tabs in a tab group.  
- * A starting point for tab-based application with multiple top-level windows. 
- * Requires Titanium Mobile SDK 1.8.0+.
- * 
- * In app.js, we generally take care of a few things:
- * - Bootstrap the application with any data we need
- * - Check for dependencies like device type, platform version or network connection
- * - Require and open our top-level UI component
- *  
- */
-
-// This is a single context application with mutliple windows in a stack
 (function() {
-//    Ti.include('util/analytics.js');
+    var config = require("/config").config;
+    var util = require("/util/util").util;
+    var style = require("/util/style").style;
+    var XHR = require("/util/xhr");
+    
     startAnalytics();
     initDB();
+
+    //起動回数保存
+    var launchAppCount = Ti.App.Properties.getInt("LaunchAppCount");
+    if (!launchAppCount) {
+        launchAppCount = 0;
+        Ti.App.Properties.setBool("shareAndReviewDoneFlg", false);
+    }
+    Ti.App.Properties.setInt("LaunchAppCount", ++launchAppCount);
+    Ti.API.info('アプリ起動 : ' + launchAppCount);
+
     //determine platform and form factor and render approproate components
     var osname = Ti.Platform.osname,
         version = Ti.Platform.version,
@@ -22,7 +23,7 @@
         model = Ti.Platform.model,
         name = Ti.Platform.name,
         height = Ti.Platform.displayCaps.platformHeight,
-        width = Ti.Platform.displayCaps.platformWidth
+        width = Ti.Platform.displayCaps.platformWidth,
         density = Ti.Platform.displayCaps.density,
         dpi = Ti.Platform.displayCaps.dpi,
         xdpi = Ti.Platform.displayCaps.xdpi,
@@ -53,7 +54,7 @@
 	// 全置換：全ての文字列 org を dest に置き換える  
 	String.prototype.replaceAll = function (org, dest){  
 	  return this.split(org).join(dest);  
-	}
+	};
     //バイト数を返す。
     String.prototype.getBytes = function() {
         var count = 0;
@@ -62,28 +63,61 @@
             if (n.length < 4) count++; else count+=2;
         }
         return count;
-    }
-	var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
-	var tabGroup = new ApplicationTabGroup();
-	// TabGroupをglobalにセット
-	Ti.App.tabGroup = tabGroup;
-	// スプラッシュイメージを一定時間表示
-	Ti.API.info(new Date() + "-------------- WAIT START ------------------");
-	var startTime = (new Date()).getTime();
-	var waitMilliSeconds = 2000;
-	while (true) {
-		if ( ( new Date() ).getTime() >= startTime + waitMilliSeconds ) break;
-	}
-//    tabGroup.open({transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT});
-//disablePolicy();
-    tabGroup.open();
+    };
+
+    //メッセージ
+    var message = null;
+    var xhr = new XHR();
+    var confUrl = config.messageUrl + "&os=" + osname + "&version=" + version;
+    Ti.API.info(new Date() + ' メッセージURL：' + confUrl);
+    xhr.get(confUrl, onSuccessCallback, onErrorCallback);
+    function onSuccessCallback(e) {
+        Ti.API.info('メッセージデータ:' + e.data);
+        if(e.data) {
+            var json = JSON.parse(e.data);
+            if(json && json[0]) {
+                if (json[0].aclFlg) {
+                    Ti.App.aclFlg = json[0].aclFlg;    //ALC出場フラグ(true/false)
+                }
+                if(json[0].message){
+                    message = json[0].message;
+                }
+            }
+        }
+        var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+        var tabGroup = new ApplicationTabGroup();
+        // TabGroupをglobalにセット
+        Ti.App.tabGroup = tabGroup;
+        // スプラッシュイメージを一定時間表示
+        Ti.API.info(new Date() + "-------------- WAIT START ------------------");
+        var startTime = (new Date()).getTime();
+        var waitMilliSeconds = 2000;
+        while (true) {
+            if ( ( new Date() ).getTime() >= startTime + waitMilliSeconds ) break;
+        }
+    //    tabGroup.open({transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT});
+    //disablePolicy();
+        tabGroup.open();
+    
+        // メッセージがある場合は表示
+        if(message) {
+            var dialog = Ti.UI.createAlertDialog({title: 'お知らせ', message: message});
+            dialog.show();
+        }
+        //TODO　実装 シェア・レビュー依頼
+        if (launchAppCount == 5 || launchAppCount % 15 == 0) {
+            //openShareAndReviewWindow();
+        }
+    };
+    function onErrorCallback(e) {
+    };  
 
 })();
 
 /**
  * DB初期化
  */
-//TODO 古いデータの削除
+// 古いデータの削除
 function initDB() {
     var util = require("/util/util").util;
     var db = Ti.Database.open('urawareds.my.life');
@@ -122,6 +156,40 @@ function startAnalytics() {
 	};
 	analytics.start(10);	//10秒に1回データ送信
 }
+
+
+/**
+ * シェア・レビュー依頼を行う。
+ */
+function openShareAndReviewWindow() {
+    var shareAndReviewDoneFlg = Ti.App.Properties.getBool("shareAndReviewDoneFlg");
+    if (!shareAndReviewDoneFlg || shareAndReviewDoneFlg == false) {
+        var dialog = Ti.UI.createAlertDialog({
+            message: "アプリをお楽しみでしょうか？"
+            ,buttonNames: ["いいえ", "はい"]
+        });
+        dialog.addEventListener('click', function(e) {
+            if (e.index === 0) {
+                //いいえの場合
+            } else if (e.index == 1) {
+                var ConfigWindow = require("/ui/handheld/ConfigWindow");
+                var configWindow = new ConfigWindow();
+                configWindow.tabBarHidden = true;
+                Ti.App.tabGroup.activeTab.open(configWindow, {animated: true});
+                Ti.App.Properties.setBool("shareAndReviewDoneFlg", true);
+                //はいの場合
+                var dialog = Ti.UI.createAlertDialog({
+                    message: 'よろしければ、レビューまたはシェアをお願いします m(_ _)m',
+                    ok: 'OK',
+                    title: ''
+                });
+                dialog.show();                
+            }
+        });    
+        dialog.show();
+    }
+}
+
 /*
 //util.jsに移動
 function checkAppInstalled() {

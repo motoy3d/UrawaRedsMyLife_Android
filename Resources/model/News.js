@@ -236,7 +236,7 @@ function createNewsRow(item) {
     row.pageTitleFull = itemTitleFull;
 	row.link = link;
 	row.linkUrl = link;
-	Ti.API.info('--------------> row.link = ' + row.linkUrl);
+	//Ti.API.info('--------------> row.link = ' + row.linkUrl);
 	row.content = content;
 	row.image = imgUrl;
 	row.pubDate = pubDateText;

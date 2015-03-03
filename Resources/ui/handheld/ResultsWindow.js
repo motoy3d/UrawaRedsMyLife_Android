@@ -55,7 +55,7 @@ text: '更新'
 			success: function(rowsData) {
 				try {
 				    var rowIdx = 0;
-				    for(i=1; i<rowsData.length; i++) {
+				    for(i=0; i<rowsData.length; i++) {
 				        if(rowsData[i] && rowsData[i].detailUrl) {
 				            rowIdx = i-1;   //最初の１行目は除くため-1
 				        } else {
@@ -64,7 +64,7 @@ text: '更新'
 				    }
 				    Ti.API.info('---- add tableView');
 					self.add(tableView);
-					tableView.setData(rowsData.slice(1));                    Ti.API.info('---- setData OK');
+					tableView.setData(rowsData);                    Ti.API.info('---- setData OK');
                     Ti.API.info('rowIdx=' + rowIdx);
                     if(4 < rowIdx) {
                         tableView.scrollToIndex(rowIdx - 2);

@@ -3,8 +3,6 @@
  */
 function StandingsWindow(tabGroup) {
 	var Standings = require("/model/Standings");
-    var ACLStandings = require("/model/ACLStandings");
-    var NabiscoStandings = require("/model/NabiscoStandings");
 	// var util = require("/util/util").util;
 	var style = require("/util/style").style;
     var customIndicator = require("/util/CustomIndicator").customIndicator;
@@ -50,58 +48,6 @@ function StandingsWindow(tabGroup) {
     Ti.API.info('★画面横幅：' + Ti.Platform.displayCaps.platformWidth);
     
     /**
-     * J1/ACL ツールバーを生成する。
-     */
-/*
-    function createToolbar() {
-        var platformWidth = Ti.Platform.displayCaps.platformWidth;
-        var j1Left  = (platformWidth - 200) / 2 - 5;
-        //J1
-        var j1 = Ti.UI.createButton(style.standings.j1Button);
-        j1.left = j1Left;
-        //ACL
-        var acl = Ti.UI.createButton(style.standings.aclButton);
-        acl.left = j1Left + 110;
-        
-        j1.addEventListener("click", function(e){
-            if(currentCompeIdx != 0) {
-                currentCompeIdx = 0;
-                j1.enabled = false;
-                j1.color = "lightgray";
-                j1.opacity = 0.5;
-                acl.enabled = true;
-                acl.color = "white";
-                acl.opacity = 1;
-                loadJ1Standings();
-            }
-        });
-        acl.addEventListener("click", function(e){
-            if(currentCompeIdx != 1) {
-                currentCompeIdx = 1;
-                j1.enabled = true;
-                j1.color = "white";
-                j1.opacity = 1;
-                acl.enabled = false;
-                acl.color = "lightgray";
-                acl.opacity = 0.5;
-                loadACLStandings();
-            }
-        });
-        var toolbar = Ti.UI.createView({
-            // グラデーションはエラーになるのでイメージで対応
-            // https://jira.appcelerator.org/browse/TIMOB-9819
-            backgroundImage: "/images/toolbarBackground.png"
-            ,backgroundRepeat: true
-            ,width: Ti.UI.FILL
-            ,height: 46
-            ,bottom: 0
-        });
-        toolbar.add(j1);
-        toolbar.add(acl);
-        return toolbar;
-    }
-*/
-    /**
      * ソートボタン ツールバーを生成する。
      */
     function createToolbar2() {
@@ -145,8 +91,9 @@ function StandingsWindow(tabGroup) {
         var j1 = Ti.UI.createButton(style.standings.j1Button);
         j1.left = j1Left;
         //ACL / Nabisco
-        var nabisco = Ti.UI.createButton(style.standings.nabiscoButton);
-        nabisco.left = j1Left + 110;
+        var aclNabisco = Ti.UI.createButton(style.standings.aclNabiscoButtonAndroid);
+        aclNabisco.title = Ti.App.aclFlg ? "ACL" : "ナビスコ";
+        aclNabisco.left = j1Left + 110;
         
         j1.addEventListener("click", function(e){
             if(currentCompeIdx != 0) {
@@ -154,22 +101,32 @@ function StandingsWindow(tabGroup) {
                 j1.enabled = false;
                 j1.color = "lightgray";
                 j1.opacity = 0.5;
-                nabisco.enabled = true;
-                nabisco.color = "white";
-                nabisco.opacity = 1;
+                aclNabisco.enabled = true;
+                aclNabisco.color = "white";
+                aclNabisco.opacity = 1;
+                sortBtn.enabled = true;
+                sortBtn.color = "white";
+                sortBtn.opacity = 1;
                 loadJ1Standings();
             }
         });
-        nabisco.addEventListener("click", function(e){
+        aclNabisco.addEventListener("click", function(e){
             if(currentCompeIdx != 1) {
                 currentCompeIdx = 1;
                 j1.enabled = true;
                 j1.color = "white";
                 j1.opacity = 1;
-                nabisco.enabled = false;
-                nabisco.color = "lightgray";
-                nabisco.opacity = 0.5;
-                loadNabiscoStandings();
+                aclNabisco.enabled = false;
+                aclNabisco.color = "lightgray";
+                aclNabisco.opacity = 0.5;
+                sortBtn.enabled = false;
+                sortBtn.color = "lightgray";
+                sortBtn.opacity = 0.5;
+                if (Ti.App.aclFlg) {
+                    loadACLStandings();
+                } else {
+                    loadNabiscoStandings();
+                }
             }
         });
 
@@ -185,7 +142,7 @@ function StandingsWindow(tabGroup) {
         });
         toolbar.add(sortBtn);
         toolbar.add(j1);
-        toolbar.add(nabisco);
+        toolbar.add(aclNabisco);
         return toolbar;
     }
 
@@ -282,43 +239,39 @@ function StandingsWindow(tabGroup) {
 		});
 	}
     /**
-     * YahooスポーツサイトのACLのhtmlを読み込んで表示する
+     * ACL順位表を読み込んで表示する
      */
     function loadACLStandings() {
+        if(isLoading) {
+            return;
+        }
         indWin.open({modal: true});
         isLoading = true;
-//        compeButtonBar.setLabels([{title: 'J1', enabled: true}, {title: 'ACL', enabled: false}]);
-        // // ヘッダー
-        // if(j1HeaderView) {
-            // containerView.remove(j1HeaderView);
-        // }
-        // var aclHeaderView = createHeaderView(true);
-        // containerView.add(aclHeaderView);
-        // // ボーダー
-        // var border = Ti.UI.createLabel(style.standings.border);
-        // containerView.add(border);
+        self.title = "ACL順位表";
+        // ヘッダー
+        if(j1HeaderView) {
+            containerView.remove(j1HeaderView);
+        }
+        aclNabiscoHeaderView = createHeaderView(true);
+        containerView.add(aclNabiscoHeaderView);
+        // ボーダー
+        var border = Ti.UI.createLabel(style.standings.border);
+        containerView.add(border);
 
-        var standings = new ACLStandings();
-        standings.load(sort, {
+        var standings = new Standings("ACL");
+        standings.load("seq", {
             success: function(standingsDataList) {
                 try {
                     var rows = new Array();
                     for(i=0; i<standingsDataList.length; i++) {
                         var data = standingsDataList[i];
+                        Ti.API.info('------- data ');
                         rows.push(createRow(
                             data.rank, data.team, data.point, data.win, data.draw, data.lose
                             , data.gotGoal, data.lostGoal, data.diff, true)
                         );
+                        Ti.API.info('------- push ');
                     }
-                    // ヘッダー
-                    if(j1HeaderView) {
-                        containerView.remove(j1HeaderView);
-                    }
-                    var aclHeaderView = createHeaderView(true);
-                    containerView.add(aclHeaderView);
-                    // ボーダー
-                    var border = Ti.UI.createLabel(style.standings.border);
-                    containerView.add(border);
                     table = Ti.UI.createTableView(style.standings.table);
                     table.height = 120;
                     table.setData(rows);
@@ -344,44 +297,41 @@ function StandingsWindow(tabGroup) {
 
 
     /**
-     * Jリーグ公式サイトサイトのナビスコのhtmlを読み込んで表示する
+     * ナビスコカップ順位表を読み込んで表示する
      */
     function loadNabiscoStandings() {
+        if(isLoading) {
+            return;
+        }
         indWin.open({modal: true});
         isLoading = true;
+        self.title = "ナビスコ予選リーグ順位表";
 //        compeButtonBar.setLabels([{title: 'J1', enabled: true}, {title: 'ACL', enabled: false}]);
-        // // ヘッダー
-        // if(j1HeaderView) {
-            // containerView.remove(j1HeaderView);
-        // }
-        // var aclHeaderView = createHeaderView(true);
-        // containerView.add(aclHeaderView);
-        // // ボーダー
-        // var border = Ti.UI.createLabel(style.standings.border);
-        // containerView.add(border);
+        // ヘッダー
+        if(j1HeaderView) {
+            containerView.remove(j1HeaderView);
+        }
+        aclNabiscoHeaderView = createHeaderView(true);
+        containerView.add(aclNabiscoHeaderView);
+        // ボーダー
+        var border = Ti.UI.createLabel(style.standings.border);
+        containerView.add(border);
 
-
-        var standings = new NabiscoStandings();
-        standings.load({
+        var standings = new Standings("Nabisco");
+        standings.load("seq", {
             success: function(standingsDataList) {
                 try {
                     var rows = new Array();
                     for(i=0; i<standingsDataList.length; i++) {
                         var data = standingsDataList[i];
+                        if(!data) {
+                            continue;
+                        }
                         rows.push(createRow(
                             data.rank, data.team, data.point, data.win, data.draw, data.lose
                             , data.gotGoal, data.lostGoal, data.diff, true)
                         );
                     }
-                    // ヘッダー
-                    if(j1HeaderView) {
-                        containerView.remove(j1HeaderView);
-                    }
-                    var nabiscoHeaderView = createHeaderView(true);
-                    containerView.add(nabiscoHeaderView);
-                    // ボーダー
-                    var border = Ti.UI.createLabel(style.standings.border);
-                    containerView.add(border);
                     table = Ti.UI.createTableView(style.standings.table);
                     table.height = 210;
                     table.setData(rows);
@@ -439,7 +389,11 @@ function StandingsWindow(tabGroup) {
         if(aclFlg) teamWidth = 100;
         if(team.length > 4) {
             var idx = team.indexOf("・");
-            team = team.substring(0, idx);
+            if (idx != -1) {
+                team = team.substring(0, idx);
+            } else {
+                team = team.substring(0, 4);
+            }
         }
         var teamLabel = createRowLabel(team, 30, teamWidth, 'left');
         row.add(teamLabel);
