@@ -1,3 +1,4 @@
+var config = require("/config").config;
 exports.style = {
 	common : {
 		loadingMsg : '読み込み中...',
@@ -220,7 +221,17 @@ exports.style = {
 			top : 90,
 			bottom : 8,
 			right : 10			
-		}
+		},
+        otherTeamBtnAndroid : {
+            title: "他チーム日程"
+            ,color: "white"
+            ,borderWidth: 1
+            ,backgroundColor: config.color
+            ,borderRadius: 8
+            ,height: 36
+            ,width: 150
+            ,top: 5         
+        }
 	},
 	standings : {
         standingsView : {

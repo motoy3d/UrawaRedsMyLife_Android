@@ -1,6 +1,11 @@
-var style = require("/util/style").style;
-var checkapp = require('com.motoy3d.check.app.android');
-//var customIndicator = require("/CustomIndicator").customIndicator;
+var config = require("/config").config;
+var style = require("util/style").style;
+var checkapp = null;
+var androidDisplay = null;
+if(Ti.Platform.osname == "android"){
+    checkapp = require('com.motoy3d.check.app.android');
+    androidDisplay = require("com.motoy3d.android.displayinfo");
+}
 exports.util = {
     /**
      * チームIDを返す 
@@ -232,6 +237,12 @@ exports.util = {
         return date;
     },
     /**
+     * 文字列を置換する 
+     */
+    replaceAll : function(expression, org, dest) {
+        return expression.split(org).join(dest);
+    },
+    /**
      *不要な文字列（タグや制御文字）を削除して返す 
      */
     deleteUnnecessaryText : function(text) {
@@ -265,6 +276,9 @@ exports.util = {
         if(endsWith(imgUrl, ".gif") ||
             imgUrl.indexOf("http://hbb.afl.rakuten.co.jp") == 0 ||
             imgUrl.indexOf("http://counter2.blog.livedoor.com") == 0 ||
+            imgUrl.indexOf("fbcdn") != -1 || //facebook(直接表示できない)
+            imgUrl.indexOf("http://measure.kuchikomi.ameba.jp") == 0 || //ameba
+            imgUrl.indexOf("rssad") != -1 || //rssad(直接表示できない)
             endsWith(imgUrl, "money_yen.png") ||  //浦和フットボール通信
             endsWith(imgUrl, "/btn_share_now.png") || //なう
             endsWith(imgUrl, "/btn_share_mixi.png")  //mixi
@@ -302,8 +316,14 @@ exports.util = {
      * 改行を削除して返す 
      */
     removeLineBreak : function(text) {
+        Ti.API.info('>>>>>>>>> text=' + text);
+        if(!text) {
+            return text;
+        }
         text = text.replace((new RegExp("\r\n","g")),"");
         text = text.replace((new RegExp("\n","g")),"");
+        text = text.replace((new RegExp("<br>","g")),"");
+        text = text.replace((new RegExp("<br/>","g")),"");
         return text;
     },
     /**
@@ -342,11 +362,131 @@ exports.util = {
         return text;
     },
     /**
-     * アプリがインストールされている場合にtrueを返す。
+     * Android 
+     */    
+    isAndroid : function() {
+        return (Ti.Platform.osname === 'android');
+    },
+    /**
+     * iPhone
+     */    
+    isiPhone : function(){
+        return (Ti.Platform.osname === 'iphone');
+    },    
+    /**
+     * iOS6以上 
+     */    
+    isiOS6Plus : function()
+    {
+        // add iphone specific tests
+        if (Titanium.Platform.name == 'iPhone OS')
+        {
+            var version = Titanium.Platform.version.split(".");
+            var major = parseInt(version[0],10);
+            
+            // can only test this support on a 3.2+ device
+            if (major >= 6)
+            {
+                return true;
+            }
+        }
+        return false;
+    },
+    /**
+     * iOS7以上 
+     */    
+    isiOS7Plus: function()
+    {
+        // add iphone specific tests
+        if (Titanium.Platform.name == 'iPhone OS')
+        {
+            var version = Titanium.Platform.version.split(".");
+            var major = parseInt(version[0],10);
+            
+            // can only test this support on a 3.2+ device
+            if (major >= 7)
+            {
+                return true;
+            }
+        }
+        return false;
+    },
+    /**
+     * アプリストアのURLを返す。
+     */
+    getAppUrl : function() {
+        if (Titanium.Platform.name == 'android') {
+            return config.androidAppUrl;
+        } else {
+            return config.iPhoneAppUrl;
+        }
+    },
+    /**
+     * Twitter/Facebook/LINEの公式アプリにテキストを引き渡す。
+     * @packageName
+     * @activityClassName
+     */
+    sendToApp : function(packageName, activityClassName, text) {
+        var intent = Ti.Android.createIntent({
+             action: Ti.Android.ACTION_SEND,
+             packageName: packageName,
+             className: activityClassName,
+             flags: Ti.Android.FLAG_ACTIVITY_NEW_TASK,
+             type: "text/plain"
+         });
+         var text;
+         intent.putExtra(Ti.Android.EXTRA_TEXT, text); //twitter supports any kind of string content (link, text, etc)
+         Ti.API.info("package=" + packageName + ", class=" + activityClassName + ', text=' + text);
+         Ti.Android.currentActivity.startActivityForResult(intent, function(e) {
+             try {
+                 Ti.API.info(packageName + ' >>>>>>>>>>>>>>>>result =   ' + e.resultCode);
+             } catch(e) {
+                 Ti.API.error("sendToAppエラー1： " + e);
+             }
+         });
+    },
+    /**
+     * [Android] アプリがインストールされている場合にtrueを返す。
      * @param {Object} packageName
      */
     isAppInstalled : function(packageName) {
-        return checkapp.exists(packageName);
+        try {
+            return checkapp.exists(packageName);
+        } catch(e) {
+            Ti.API.info('isAppInstalledエラー： ' + e);
+            return false;
+        }
+    },
+    /**
+     * [Android] ディスプレイ情報を返す
+     * @param {Object} packageName
+     */
+    getDpi : function() {
+        if(Ti.Platform.osname === 'android') {
+            try {
+                return androidDisplay.densityDpi;
+            } catch(e) {
+                Ti.API.info('getDpiエラー： ' + e);
+                return false;
+            }
+        } else {
+            return "";
+        }
+    },
+    /**
+     * [Android] twitterインテントのクラス名を返す
+     */
+    getTwitterClass : function() {
+        if(Ti.Platform.osname === 'android') {
+            try {
+                return androidDisplay.twitterClass;
+            } catch(e) {
+                Ti.API.info('getTwitterClassエラー： ' + e);
+                return false;
+            }
+        } else {
+            return "";
+        }
     }
 
 };

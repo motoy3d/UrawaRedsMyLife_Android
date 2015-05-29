@@ -146,7 +146,7 @@ function createNewsRow(item) {
             var urlEndIdx = content.indexOf('"', urlStartIdx);
             imgUrl = content.substring(urlStartIdx, urlEndIdx);
             imgUrl = util.replaceAll(imgUrl, "&amp;", "&");
-            Ti.API.debug('画像＝＝＝＝＝' + imgUrl + "  >  " + item.entry_title);
+            //Ti.API.debug('画像＝＝＝＝＝' + imgUrl + "  >  " + item.entry_title);
             // アイコン等はgifが多いのでスキップ
             if(!util.isUnnecessaryImage(imgUrl)) {
 //TODO Android4.0でエラー？ F-10D実機では問題なし。
@@ -214,7 +214,7 @@ function createNewsRow(item) {
 		fullSiteName = "";
 	}
 	var siteName = newsSource.optimizeSiteName(item.site_name);
-	Ti.API.debug("siteName1====" + siteName + ", link=" + link);
+	//Ti.API.debug("siteName1====" + siteName + ", link=" + link);
 	if('' == siteName) {
 		siteName = newsSource.getSiteName(link);
 		fullSiteName = siteName;

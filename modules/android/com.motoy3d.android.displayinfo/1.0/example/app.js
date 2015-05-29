@@ -13,17 +13,16 @@ win.add(label);
 win.open();
 
 // TODO: write your module tests here
-var androidignorestrictmode = require('motoy3d.android.ignore.strictmode');
-Ti.API.info("module is => " + androidignorestrictmode);
-androidignorestrictmode.disablePolicy();
+var android_display_info = require('com.motoy3d.android.displayinfo');
+Ti.API.info("module is => " + android_display_info);
 
-label.text = androidignorestrictmode.example();
+label.text = android_display_info.example();
 
-Ti.API.info("module exampleProp is => " + androidignorestrictmode.exampleProp);
-androidignorestrictmode.exampleProp = "This is a test value";
+Ti.API.info("module exampleProp is => " + android_display_info.exampleProp);
+android_display_info.exampleProp = "This is a test value";
 
 if (Ti.Platform.name == "android") {
-	var proxy = androidignorestrictmode.createExample({
+	var proxy = android_display_info.createExample({
 		message: "Creating an example Proxy",
 		backgroundColor: "red",
 		width: 100,

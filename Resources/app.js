@@ -189,32 +189,3 @@ function openShareAndReviewWindow() {
         dialog.show();
     }
 }
-
-/*
-//util.jsに移動
-function checkAppInstalled() {
-    var checkapp = require('com.motoy3d.check.app.android');
-    if (checkapp.exists("com.twitter.android")) {
-        Ti.API.info('★★Twitter app installed.');
-    } else {
-        Ti.API.info('★★Twitter app not installed.');
-    }
-    if (checkapp.exists("jp.naver.line.android")) {
-        Ti.API.info('★★LINE app installed.');
-    } else {
-        Ti.API.info('★★LINE app not installed.');
-    }
-    if (checkapp.exists("com.facebook.katana")) {
-        Ti.API.info('★★Facebook app installed.');
-    } else {
-        Ti.API.info('★★Facebook app not installed.');
-    }    
-}*/
-/*function disablePolicy() {
-    // 自前モジュールによりStrictModeを回避
-    var androidignorestrictmode = require('motoy3d.android.ignore.strictmode');
-    Ti.API.info("自前モジュール => " + androidignorestrictmode);
-    var result = androidignorestrictmode.disablePolicy();
-    Ti.API.info('結果： ' + result);   
-    Ti.API.info('スレッドポリシー：' + androidignorestrictmode.threadPolicy); 
-}*/

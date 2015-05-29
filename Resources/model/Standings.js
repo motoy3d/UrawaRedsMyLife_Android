@@ -1,11 +1,11 @@
 /**
  * 順位表取得サービス
  */
-function Standings(compe) {
+function Standings(compe, stage) {
     var config = require("/config").config;
-	var util = require("/util/util").util;
-    var style = require("/util/style").style;
-    var XHR = require("/util/xhr");
+	var util = require("util/util").util;
+    var style = require("util/style").style;
+    var XHR = require("util/xhr");
 	var self = {};
 	self.load = load;
 
@@ -14,6 +14,9 @@ function Standings(compe) {
         compe = "J";
     }
     standingsUrl += "&compe=" + compe;
+    if (stage) {
+        standingsUrl += "&stage=" + stage;
+    }
     
 	/**
 	 * 自前サーバからJSONを読み込んで表示する
@@ -30,9 +33,9 @@ function Standings(compe) {
             //TODO return;
 		}
         if(sort) {
-            Ti.App.Analytics.trackPageview('/standings?sort=' + sort);
+            Ti.App.Analytics.trackPageview('/standings?compe=' + compe + '&sort=' + sort);
         } else {
-            Ti.App.Analytics.trackPageview('/standings');
+            Ti.App.Analytics.trackPageview('/standings?compe=' + compe);
         }
 
         var xhr = new XHR();
@@ -55,7 +58,6 @@ function Standings(compe) {
                     // 新シーズン開始前
                     callback.fail("新シーズンの開幕までお待ちください");
                 } else {
-                    Ti.API.info('xxxxxxxxx e.data is null');
                     callback.fail(style.common.loadingFailMsg);
                 }
                 return;
@@ -66,10 +68,12 @@ function Standings(compe) {
                 for(i=0; i<dataList.length; i++) {
                     var ranking = dataList[i];
                     var rank = ranking.rank;
+                    var teamId = ranking.team_id;
                     var team = util.getSimpleTeamName(ranking.team_name);
                     if (!team){
                         team = ranking.team_name;
                     }
+                    var teamFull = ranking.team_name;
                     var point = ranking.point;
                     var win = ranking.win;
                     var draw = ranking.draw;
@@ -81,7 +85,9 @@ function Standings(compe) {
                     
                     var standingsData = {
                         rank: rank
+                        ,teamId: teamId
                         ,team: team
+                        ,teamFull: teamFull
                         ,point: point
                         ,win: win
                         ,draw: draw
@@ -92,10 +98,8 @@ function Standings(compe) {
                     };
                     standingsDataList.push(standingsData);
                 }
-                Ti.API.info('>>>>>>>>>>> success');
                 callback.success(standingsDataList);
             } catch(ex) {
-                Ti.API.info('>>>>>>>>>>> catch');
                 Ti.API.error('---------------------\n' + ex);   
                 callback.fail(style.common.loadingFailMsg);
             } finally {
@@ -106,7 +110,6 @@ function Standings(compe) {
         };
         function onErrorCallback(e) {
             Ti.API.error(e);
-            Ti.API.info('xxxxxxxxx onErrorCallback');
         }
 	}
 	return self;
