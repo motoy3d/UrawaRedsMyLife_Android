@@ -7,7 +7,7 @@ function ResultsWindow(tabGroup, otherTeamId, otherTeamName) {
     var util = require("/util/util").util;
 	var Results = require("/model/Results");
     var Standings = require("/model/Standings");
-    var WebWindow = require("/ui/handheld/WebWindow");
+    var WebWindow = require(util.isiPhone()? "/ui/handheld/WebWindow" : "/ui/handheld/WebWindowAndroid");
 	var YoutubeWindow = require("/ui/handheld/YoutubeWindow");
 	var style = require("/util/style").style;
 	var initLoaded = false;

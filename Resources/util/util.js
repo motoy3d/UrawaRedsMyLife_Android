@@ -7,18 +7,6 @@ if(Ti.Platform.osname == "android"){
     androidDisplay = require("com.motoy3d.android.displayinfo");
 }
 exports.util = {
-    /**
-     * チームIDを返す 
-     */
-    getTeamId : function() {
-        return "reds";
-    },
-    /**
-     * チーム名を返す 
-     */
-    getTeamName : function() {
-        return "浦和";
-    },
 	/**
 	 * 現時点の表示対象シーズン(年)を返す。
 	 */
@@ -49,12 +37,12 @@ exports.util = {
 		}
 		return (sub >= 0) && (text.lastIndexOf(suffix) === sub);
 	},
-    /**
-     * 文字列を指定バイト数以下にカットして返す
-     */
-    cutToByteLength : function(text, byteLen) {
-        var count = 0;
-        var result = "";
+	/**
+	 * 文字列を指定バイト数以下にカットして返す
+	 */
+	cutToByteLength : function(text, byteLen) {
+	    var count = 0;
+	    var result = "";
         for (i=0; i<text.length; i++) {
             var ch = text.charAt(i);
             var escChar = escape(ch);
@@ -65,7 +53,7 @@ exports.util = {
             }
         }
         return text;
-    },
+	},
 	/**
 	 * オフラインメッセージダイアログを表示する
 	 */
@@ -97,24 +85,24 @@ exports.util = {
 	 * チーム名を正式名から簡略形式で返す。
 	 */
 	getSimpleTeamName : function(teamName) {
-        if(teamName == 'ベガルタ仙台') return '仙台';   
-        else if(teamName == 'サンフレッチェ広島') return '広島';   
-        else if(teamName == 'ジュビロ磐田') return '磐田';  
-        else if(teamName == '清水エスパルス') return '清水'; 
-        else if(teamName == '浦和レッズ') return '浦和';   
-        else if(teamName == 'FC東京') return 'FC東京';  
-        else if(teamName == '川崎フロンターレ') return '川崎';    
-        else if(teamName == 'サガン鳥栖') return '鳥栖';   
-        else if(teamName == '横浜F・マリノス') return '横浜FM';  
-        else if(teamName == '鹿島アントラーズ') return '鹿島';    
-        else if(teamName == 'セレッソ大阪') return 'C大阪'; 
-        else if(teamName == '柏レイソル') return '柏';    
-        else if(teamName == '名古屋グランパス') return '名古屋';   
-        else if(teamName == 'ヴィッセル神戸') return '神戸'; 
-        else if(teamName == '大宮アルディージャ') return '大宮';   
-        else if(teamName == 'ガンバ大阪') return 'G大阪';  
-        else if(teamName == 'アルビレックス新潟') return '新潟';   
-        else if(teamName == 'コンサドーレ札幌') return '札幌';
+		if(teamName == 'ベガルタ仙台') return '仙台';	
+		else if(teamName == 'サンフレッチェ広島') return '広島';	
+		else if(teamName == 'ジュビロ磐田') return '磐田';	
+		else if(teamName == '清水エスパルス') return '清水';	
+		else if(teamName == '浦和レッズ') return '浦和';	
+		else if(teamName == 'FC東京') return 'FC東京';	
+		else if(teamName == '川崎フロンターレ') return '川崎';	
+		else if(teamName == 'サガン鳥栖') return '鳥栖';	
+		else if(teamName == '横浜F・マリノス') return '横浜FM';	
+		else if(teamName == '鹿島アントラーズ') return '鹿島';	
+		else if(teamName == 'セレッソ大阪') return 'C大阪';	
+		else if(teamName == '柏レイソル') return '柏';	
+		else if(teamName == '名古屋グランパス') return '名古屋';	
+		else if(teamName == 'ヴィッセル神戸') return '神戸';	
+		else if(teamName == '大宮アルディージャ') return '大宮';	
+		else if(teamName == 'ガンバ大阪') return 'G大阪';	
+		else if(teamName == 'アルビレックス新潟') return '新潟';	
+		else if(teamName == 'コンサドーレ札幌') return '札幌';
         else if(teamName == 'ヴァンフォーレ甲府') return '甲府';
         else if(teamName == '湘南ベルマーレ') return '湘南';
         else if(teamName == '大分トリニータ') return '大分';
@@ -149,19 +137,9 @@ exports.util = {
         else if(teamName == 'Y.S.C.C.横浜') return 'YS横浜';
         else if(teamName == ' V・ファーレン長崎') return '長崎';
         else if(teamName == 'カマタマーレ讃岐') return '讃岐';
-	},
-    /**
-     * Jチーム名リスト返す。
-     */
-    getTeamNameList : function() {
-        return new Array(
-            "横浜","大阪","浦和","東京","鳥栖","鹿島","大宮","仙台","広島","名古屋","柏","大分","湘南","清水","磐田","甲府"
-            ,"新潟","川崎","神戸","京都","鳥取","松本","大阪","群馬","山形","福岡","富山","千葉","横浜","愛媛","北九州","水戸"
-            ,"岡山","徳島","栃木","熊本","長崎","東京","札幌","岐阜"
-            );
     },
 	/**
-	 *  ゼロパディング
+	 * ゼロパディング 
 	 */
 	zeroPad : function(str, length) {
 	    return new Array(length - ('' + str).length + 1).join('0') + str;
@@ -172,7 +150,7 @@ exports.util = {
     formatDate : function(date) {
         var zeroPad = function(str, length) {
             return new Array(length - ('' + str).length + 1).join('0') + str;
-        }
+        };
         if(!date) {
             date = new Date();
         }
@@ -186,7 +164,7 @@ exports.util = {
     formatDatetime : function(date) {
         var zeroPad = function(str, length) {
             return new Array(length - ('' + str).length + 1).join('0') + str;
-        }
+        };
         if(!date) {
             date = new Date();
         }
@@ -201,7 +179,7 @@ exports.util = {
     formatDatetime2 : function(date) {
         var zeroPad = function(str, length) {
             return new Array(length - ('' + str).length + 1).join('0') + str;
-        }
+        };
         if(!date) {
             date = new Date();
         }
@@ -359,6 +337,7 @@ exports.util = {
             }
             if ( flgAllReplaced ) break;
         }
+    
         return text;
     },
     /**
@@ -488,5 +467,4 @@ exports.util = {
             return "";
         }
     }
-
 };

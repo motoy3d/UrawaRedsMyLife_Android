@@ -1,357 +1,405 @@
 /**
  * ニュース画面UI
  * loadFeed フィードを読み込む
- * beginLoadingOlder 追加ロードを開始する
- * endLoadingOlder 追加ロード終了時処理
- * beginLoadingNewer 最新ロードを開始する
- * endLoadingNewer 最新ロード終了時処理
  */
-function NewsWindow(tabGroup) {    
-	var News = require("/model/News");
-	var WebWindow = require("/ui/handheld/WebWindow");
+function NewsWindow(tabGroup) {
+    var News = require("/model/News");
+    var util = require("/util/util").util;
+    var WebWindow = null;
+    if(util.isiPhone()) {
+        WebWindow = require("/ui/handheld/WebWindow");
+    } else {
+        WebWindow = require("/ui/handheld/WebWindowAndroid");
+    }
     var ConfigWindow = require("/ui/handheld/ConfigWindow");
-	var util = require("/util/util").util;
-	var style = require("/util/style").style;
-    var customIndicator = require("/util/CustomIndicator").customIndicator;
-	var news = new News();
-	var isOpeningNews = false;
-
-    var indWin = customIndicator.create();
-
-    // ウィンドウ
-	var self = Ti.UI.createWindow({
-		title: "ニュース"
-		,backgroundColor: 'black'
-	});
-    //TODO 更新ボタン---------------------------------------
-    var refreshBtn = Ti.UI.createButton({
-        backgroundImage: "/images/refresh.png",
-        backgroundSelectedImage: "/images/refresh_pressed.png",
-        width: 48,
-        height: 48,
-        top : 2,
-        right : 5 + 48 + 10
-    });
-    refreshBtn.addEventListener('click', function() {
-        indWin.open({modal: true});
-//        indicator.show();
-        setTimeout(function() {
-            beginLoadingNewer();
-        },100);
-    });
-    self.add(refreshBtn);
-    
-    // 設定ボタン---------------------------------------
+    var style = require("/util/style").style;
+    var config = require("/config").config;
+    var news = new News();
+    var isOpeningNews = false;
+ 
+    // 設定ボタン
     var configButton = Ti.UI.createButton({
-        backgroundImage: "/images/gear.png",
-        backgroundSelectedImage: "/images/gear_pressed.png",
-        width: 38,
-        height: 38,
-        top : 2,
-        right : 5
+        image: "/images/th.png"
     });
+    var configButtonClicked = false;
     configButton.addEventListener('click', function() {
-        var configWindow = new ConfigWindow();
-        tabGroup.activeTab.open(configWindow, {animated: true});
+        if(configButtonClicked) {return;}
+        try {
+            configButtonClicked = true;
+            var configWindow = new ConfigWindow();
+            configWindow.tabBarHidden = true;
+            tabGroup.activeTab.open(configWindow, {animated: true});
+        } finally{
+            configButtonClicked = false;
+        }
     });
-    self.add(configButton);
-
-	// テーブル
-	var table = Ti.UI.createTableView(style.news.table);
-	table.allowsSelectionDuringEditing = false;
-
-    try {
-        // ボーダー
-        var border = Ti.UI.createView(style.news.tableBorder);
-        // テーブルヘッダ
-        var tableHeader = Ti.UI.createView(style.news.tableHeader);
-        // fake it til ya make it..  create a 2 pixel
-        // bottom border
-        tableHeader.add(border);
-        // 矢印
-        var arrow = Ti.UI.createView(style.news.arrow);
-        // ステータスラベル
-        var statusLabel = Ti.UI.createLabel(style.news.statusLabel);
-        // 最終更新日時ラベル
-        var lastUpdatedLabel = Ti.UI.createLabel(style.news.lastUpdatedLabel);
-        lastUpdatedLabel.text = "最終更新: "+util.formatDatetime();
-    
-        // インジケータ
-        var refreshActInd = Titanium.UI.createActivityIndicator(style.news.refreshActIndicator);
-        // テーブルヘッダに矢印、ステータス、最終更新日時、インジケータを追加し、
-        // テーブルにヘッダをセット
-        tableHeader.add(arrow);
-        tableHeader.add(statusLabel);
-        tableHeader.add(lastUpdatedLabel);
-        tableHeader.add(refreshActInd);
-        table.headerPullView = tableHeader;
-        // フラグ
-        var pulling = false;
-        var reloading = false;
-    	
-    	// 読み込み中Row+indicator
-    	var updating = false;
-    	var loadingRow = Ti.UI.createTableViewRow(style.news.loadMoreRow);
-    	var loadingImg = Ti.UI.createImageView(style.news.loadMoreImg);
-    	//TODO
-    	var loadingMsg = Ti.UI.createLabel({
-    	    text : style.common.loadingMsg
-    	    ,left : 20
-    	    ,height : 80
-    	});
-        loadingRow.add(loadingImg);
-    	loadingRow.add(loadingMsg);
-    /*
-    	var loadingInd = Ti.UI.createActivityIndicator({
-    		color: 'white'
-    		,message: style.common.loadingMsg
-    		,width: Ti.UI.FILL
-    		,height: 50
-    	});
-    	loadingRow.add(loadingInd);
-    */  
-    	var lastRow = news.loadFeedSize;
-    	var visitedUrls = new Array();
-    	// ニュース選択時のアクション
-    	table.addEventListener("click", function(e) {
-            table.allowsSelection = false;
-    		Ti.API.info("  サイト名＝＝＝＝＝＝＝＝＝" + e.row.siteName + ", link=" + e.row.linkUrl);
-    		visitedUrls.push(e.row.linkUrl);
-    		e.row.backgroundColor = style.news.visitedBgColor;
-    		news.saveVisitedUrl(e.row.linkUrl);
-    		var webData = {
-    			title : e.row.pageTitle
-    			,siteName : e.row.fullSiteName
-    			,link : e.row.linkUrl
-    			,content : e.row.content
-    			,pubDate : e.row.pubDate
-    			,toolbarVisible : true
-    		};
-    		var webWindow = new WebWindow(webData);
-    Ti.API.info('-------webWindow = ' + webWindow);
-    		// navGroup.open(webWindow, {animated: true});
-    		tabGroup.activeTab.open(webWindow, {animated: true});
-    Ti.API.info('-------------activeTab.open');
-            Ti.App.Analytics.trackPageview('/newsDetail');
-            table.allowsSelection = true;
-    	});
-    
-    	/**
-    	 * 追加ロードを開始する(古いデータを読み込む)
-    	 */
-    	function beginLoadingOlder() {
-    		Ti.API.info("===== beginLoadingOlder =====");
-    		updating = true;
-    		// 読み込み中Row
-    		table.appendRow(loadingRow);
-    		// loadingInd.show();
-    		loadFeed(news, 'olderEntries');
-    	}	
-    	/**
-    	 * 追加ロード終了時処理。ローディングRowの削除、スクロール
-    	 */
-    	function endLoadingOlder() {
-    		updating = false;
-    		Ti.API.info(" endLoadingOlder. lastRow=" + lastRow + ", table.size=" + table.data[0].length);
-    	}
-        /**
-         * 最新ロードを開始する(新しいデータを読み込む)
-         */
-        function beginLoadingNewer() {
-            Ti.API.info("===== beginLoadingNewer =====");
-            loadFeed(news, 'newerEntries');
+    // ウィンドウ
+    var self = Ti.UI.createWindow({
+        title: "ニュース"
+        ,navBarHidden: false
+        ,backgroundColor: 'black'
+        ,barColor: style.common.barColor
+        ,navTintColor: style.common.navTintColor
+        ,rightNavButton: configButton
+        ,titleAttributes: {
+            color: style.common.navTintColor
         }
-        /**
-         * 最新ロード終了時処理。
-         */
-        function endLoadingNewer() {
-            Ti.API.debug('====== endLoadingNewer =======');
-            // when you're done, just reset
-            //table.setContentInsets({top: 0},{animated: false});
-            reloading = false;
-            //lastUpdatedLabel.text = "最終更新: "+ util.formatDatetime();
-            //statusLabel.text = "ひっぱって更新...";
-            //refreshActInd.hide();
-            //arrow.show();
-            indWin.close();
+    });
+
+/*
+    // 広告
+    var ad = require('net.nend');
+    var adViewContainer = Ti.UI.createView (style.news.adViewContainer);
+    var adView;
+    if(Ti.Platform.osname === 'android'){        
+        // for Android
+        // Icon Layout type. 
+        adView = ad.createView ({
+            spotId: config.nendSpotIdAndroid,
+            apiKey: config.nendApiKeyAndroid,
+            adType:'icon',
+            orientation:'horizontal',
+            width: '320dp',
+            height: '75dp',
+            top: '5dp',
+            iconCount: 4
+        });
+    } else {
+        // for iPhone
+        if(Ti.App.adType == 1) {//アイコン
+            Ti.API.info('////アイコン広告////');
+            adView = ad.createIconsView (style.news.adViewIPhoneIcon);
+            adView.spotId = config.nendSpotIdIPhoneIcon;
+            adView.apiKey = config.nendApiKeyIPhoneIcon;
+        } else if(Ti.App.adType == 2) {//バナー
+            Ti.API.info('////バナー広告////');
+            adView = ad.createView (style.news.adViewIPhoneBanner);
+            adView.spotId = config.nendSpotIdIPhoneBanner;
+            adView.apiKey = config.nendApiKeyIPhoneBanner;
         }
+    }
+    if (adView) {
+        // 2. Add Event Listener.
+        // 受信成功通知
+        adView.addEventListener('receive',function(e){
+            //Ti.API.info('icon receive');
+        });
+        // 受信エラー通知
+        adView.addEventListener('error',function(e){
+            Ti.API.info('広告受信エラー');
+            adViewContainer.setHeight(0);
+            listView.setTop(0);
+        });
+        // クリック通知
+        adView.addEventListener('click',function(e){
+            Ti.API.info('広告クリック');
+        }); 
         
-        // テーブルに対するスクロールイベントハンドラを追加。
-        table.addEventListener('scroll', function(e) {
-            //Ti.API.info('scrollイベント:' + e);
-            // for(var v in e) {
-                // Ti.API.info("  " + v + "=" + e[v]);
-            // }
-            // Ti.API.info('----------------------');
-            
-            // 距離が前回の距離より短くなっている＝テーブルが上に向かってスクロールしている。
-            if(!table.data[0]) {
-                return;
+        // 3. Add View
+        adViewContainer.add(adView);
+        self.add(adViewContainer);
+    }
+    */
+    // インジケータ
+    var indicator = Ti.UI.createActivityIndicator();
+    self.add(indicator);
+    indicator.show();
+    
+    var lastRow = news.loadFeedSize;
+    var visitedUrls = new Array();
+    var lastSelectedRow = null;
+    
+    // ListViewのテンプレート
+    var rowTemplate = {
+        childTemplates : style.news.listViewTemplate,
+        properties : {
+            height : Ti.UI.SIZE
+            ,backgroundColor: '#000'
+        }
+    };
+    // Android用
+    var refreshTemplate = {
+        childTemplates : style.news.listViewRefreshTemplate,
+        properties : {
+            height : Ti.UI.SIZE
+            ,backgroundColor: '#000'
+        }
+    };
+
+    var listView = Ti.UI.createListView({
+        templates : {
+            'template' : rowTemplate
+            ,'refreshTemplate': refreshTemplate
+        }
+        ,defaultItemTemplate : 'template'
+        ,backgroundColor: '#000'
+    });
+    Ti.API.debug("★style.news.listView.backgroundColor=" + style.news.listView.backgroundColor);
+    listView.applyProperties(style.news.listView);
+    var sections = [];
+    var dataSection = Ti.UI.createListSection();
+    sections.push(dataSection);
+    
+    // アイテムクリックイベント
+    listView.addEventListener('itemclick', function(e){
+        Ti.API.info('アイテムクリックイベント：' + util.toString(e));
+        if (e.itemIndex == undefined) {
+            Ti.API.error('NO itemId in event. Check data. If data is right, file bug in JIRA.');
+            return;
+        }
+        //Androidの場合、１行目はリロードボタン
+        if(util.isAndroid() && e.itemIndex == 0) {
+            if(e.bindId && e.bindId == 'refreshBtn') {
+                loadFeed(news, "newerEntries");  //最新をロード
             }
-            // 更新中でなく，テーブルの最後の方までスクロールしたら。
-            if(!updating) {
-                if(e.visibleItemCount + e.firstVisibleItem > table.data[0].rows.length-2) {
-                    if(!updating) { //念のため再度チェック
-                        beginLoadingOlder();
-                        //updating = false; //loadTweets()中のYQL(非同期)処理終了時に実行
-                    }
+            else if(e.bindId && e.bindId == 'configBtn') {
+                if(configButtonClicked) {return;}
+                try {
+                    configButtonClicked = true;
+                    var configWindow = new ConfigWindow();
+                    configWindow.tabBarHidden = true;
+                    tabGroup.activeTab.open(configWindow, {animated: true});
+                } finally{
+                    configButtonClicked = false;
                 }
             }
-        });
-        
-
-    	var lastDistance = 0; // calculate location to determine direction
-    	// テーブルのスクロールイベント
-//    	table.addEventListener('scroll',function(e) {
-    //		var offset = e.contentOffset.y;
-    //		var height = e.size.height;
-    //		var total = offset + height;
-    //		var theEnd = e.contentSize.height;
-    //		var distance = theEnd - total;
-    	
-    		// going down is the only time we dynamically load,
-    		// going up we can safely ignore -- note here that
-    		// the values will be negative so we do the opposite
-    //		if (distance < lastDistance) {
-    //			// adjust the % of rows scrolled before we decide to start fetching
-    //			var nearEnd = theEnd * .90;
-    //			if (!updating && (total >= nearEnd)) {
-    //				beginLoadingOlder();
-    //			}
-    //		}
-            // pull to refresh
-            // else if (offset <= -65.0 && !pulling && !reloading) {
-                // var t = Ti.UI.create2DMatrix();
-                // t = t.rotate(-180);
-                // pulling = true;
-                // arrow.animate({transform: t, duration: 180});
-                // statusLabel.text = "ひっぱって更新...";
-            // }
-            // else if (pulling && (offset > -65.0 && offset < 0) && !reloading ) {
-                // pulling = false;
-                // var t = Ti.UI.create2DMatrix();
-                // arrow.animate({transform:t,duration:180});
-                // statusLabel.text = "ひっぱって更新...";
-            // }
-    //		lastDistance = distance;
-//    	});
-        
-        // ドラッグ終了イベント（pull to refresh）
-    /*
-        var event1 = 'dragEnd';
-        if (Ti.version >= '3.0.0') {
-            event1 = 'dragend';
+            return;
+        } else {
+            //URLを開く
+            openEntryWin(e.itemIndex);
         }
-        table.addEventListener(event1,function(e) {
-            if (pulling && !reloading) {
-                reloading = true;
-                pulling = false;
-                arrow.hide();
-                refreshActInd.show();
-                statusLabel.text = "読み込み中...";
-                table.setContentInsets({top:60},{animated:true});
-                arrow.transform=Ti.UI.create2DMatrix();
-                beginLoadingNewer();
+    });
+
+    /**
+     * ツイートのWebウィンドウを開く
+     */
+    function openEntryWin(itemIndex) {
+        try {
+            if(isOpeningNews) {
+                Ti.API.info('ニュース詳細画面オープン処理中のためブロック');
+                return;
             }
-        });
-    */
-    
-    	/**
-    	 * フィードを取得して表示する
-    	 */
-    	function loadFeed(news, kind) {
-            if("firstTime" == kind) {
-                //indicator.show();
-                indWin.open({modal: true});
-            }
-    		var style = require("/util/style").style;
-    		Ti.API.debug(new Date() + '  loadFeed.................................tableView=' + table);
-    		//alert('loadFeed : ' + news + ", kind=" + kind);
-            //alert(news.loadNewsFeed);
-    		news.loadNewsFeed(
-			    kind, news.newest_item_timestamp, news.oldest_item_timestamp,
-    		    { //callback
-        			success: function(rowsData, newest_item_timestamp, oldest_item_timestamp) {
-        				try {
-        					// 読み込み中Row削除
-    //    					loadingInd.hide();
-        					
-    //    					Ti.API.info("rowsData■" + rowsData);
-                            // 初回ロード時
-        					if("firstTime" == kind) {
-                                self.add(table);
-                                if(rowsData) {
-                                    table.setData(rowsData);
-	                                news.newest_item_timestamp = newest_item_timestamp;
-    	                            news.oldest_item_timestamp = oldest_item_timestamp;
-                                }
-                                //indicator.hide();
-                                indWin.close();
-                                Ti.API.debug('■■■newest_item_timestamp = ' + news.newest_item_timestamp);
-        					}
-        					// 2回目以降の追加ロード時
-        					else if("olderEntries" == kind) {
-                                lastRow = table.data[0].rows.length - 1;
-        						var scrollToIdx = table.data[0].rows.length;
-        						if(rowsData) {
-        							var len = rowsData.length;
-                                    for(i=0; i<len; i++) {
-                                        Ti.API.debug("appendRow. " + i + "  " + rowsData[i].children[0].text);
-                                        table.appendRow(rowsData[i]);
-                                    }
-                                    news.oldest_item_timestamp = oldest_item_timestamp;
-        						}
-        						Ti.API.debug("読み込み中Row削除：" + lastRow);
-        						table.deleteRow(lastRow);
-        						endLoadingOlder();
-        					}
-                            // 最新データロード時
-                            else if("newerEntries" == kind) {
-                                if(rowsData) {
-                                    Ti.API.debug('最新データ読み込み  件数＝' + rowsData.length);
-                                    table.startLayout();
-                                    for(i=0; i<rowsData.length; i++) {
-                                        Ti.API.info("insertRowBefore. " + i + "  " + rowsData[i].pubDate + "  " 
-                                            + rowsData[i].pageTitle);
-                                        table.insertRowBefore(i, rowsData[i]);
-                                    }
-                                    table.finishLayout();
-                                    if(news.newest_item_timestamp < newest_item_timestamp) {
-                                        news.newest_item_timestamp = newest_item_timestamp;
-                                    }
-                                    Ti.API.debug('■newest_item_timestamp = ' + news.newest_item_timestamp);
-                                }
-                                endLoadingNewer();
-        					}
-        					else {
-        					    Ti.API.error('NewsWindow#loadFeedに渡すkindが不正です。kind=' + kind);
-        					}
-        				} finally {
-        				    //indicator.hide();
-        					indWin.close();
-        				}
-        			},
-        			fail: function(message) {
-        			    //indicator.hide();
-        			    indWin.close();
-        				var dialog = Ti.UI.createAlertDialog({
-        					message: message,
-        					buttonNames: ['OK']
-        				});
-        				dialog.show();
-        			}
-        		}
-    		);
-    	}
-//openイベント
-self.addEventListener('open', function(e) {
-    loadFeed(news, 'firstTime');
-});
-//    	loadFeed(news, 'firstTime');	
-    } finally {
-        //indicator.hide();
-        indWin.close();
+            isOpeningNews = true;
+            var item = listView.sections[0].items[itemIndex];
+            // 行背景色変更
+            item.properties.backgroundColor = style.news.visitedBgColor;
+            item.contentView.backgroundColor = style.news.visitedBgColor;
+            listView.sections[0].updateItemAt(itemIndex, item);
+            
+            var webData = null;
+            Ti.API.info("  ニュース選択。サイト名＝＝＝＝＝＝＝＝＝" + item.siteName + " : " + item.pageTitle);
+            visitedUrls.push(item.link);
+            lastSelectedRow = itemIndex;
+            news.saveVisitedUrl(item.link);
+            webData = {
+                title : item.pageTitle
+                ,titleFull : item.pageTitleFull
+                ,siteName : item.fullSiteName
+                ,link : item.link
+                ,content : item.content
+                ,image : item.image
+                ,pubDate : item.pubDate
+                ,navBarHidden : true
+                ,toolbarVisible : true
+            };
+            var webWindow = new WebWindow(webData);
+            //TODO 黒いスペースができてしまうTiのバグ
+            //webWindow.tabBarHidden = true;
+            tabGroup.activeTab.open(webWindow, {animated: true});
+            Ti.App.Analytics.trackPageview('/newsDetail');
+        } finally {
+            isOpeningNews = false;
+        }
     }
-	return self;
+// ##########################################
+// PullView
+// ##########################################
+    /**
+     * PullHeaderをリセットする
+     */
+    function resetPullHeader(){
+        actInd.hide();
+        imageArrow.transform=Ti.UI.create2DMatrix();
+        imageArrow.show();
+        //TODO Android
+        if (util.isiPhone()) {
+            listView.setContentInsets({top:0}, {animated:true});
+        }
+    }
+    function pullListener(e){
+        if (e.active == false) {
+            var unrotate = Ti.UI.create2DMatrix();
+            imageArrow.animate({transform:unrotate, duration:180});
+        } else {
+            var rotate = Ti.UI.create2DMatrix().rotate(180);
+            imageArrow.animate({transform:rotate, duration:180});
+        }
+    }
+ 
+    function pullendListener(e){
+        imageArrow.hide();
+        actInd.show();
+        //TODO Android
+        if (util.isiPhone()) {
+            listView.setContentInsets({top:80}, {animated:true});
+        }
+        setTimeout(function(){
+            loadFeed(news, 'newerEntries');
+        }, 2000);
+    }
+    // ヘッダ(pull to refreshの行)
+    var listViewHeader = Ti.UI.createView({
+        backgroundColor:'#000',
+        width: Ti.UI.SIZE, height: 80
+    });
+    var border = Ti.UI.createView({
+        backgroundColor:'#576c89',
+        bottom:0,
+        height:2
+    });
+    listViewHeader.add(border);
+  
+    var imageArrow = Ti.UI.createImageView({
+        image: '/images/whiteArrow.png',
+        /*left: 20,*/ bottom: 10,
+        width: 23, height: 60
+    });
+    listViewHeader.add(imageArrow);
+      
+    var actInd = Ti.UI.createActivityIndicator({
+        /*left:20,*/ bottom:13
+    });
+    listViewHeader.add(actInd);
+    listView.pullView = listViewHeader; 
+    listView.addEventListener('pull', pullListener);
+    listView.addEventListener('pullend',pullendListener);
+
+    // ##########################################
+    // Dynamic Loading
+    // ##########################################
+    listView.addEventListener('marker', function(e) {
+        loadFeed(news, 'olderEntries');
+    });
+    
+    /**
+     * フィードを取得して表示する
+     * kind=firstTime/newerEntries/olderEntries
+     */
+    function loadFeed(news, kind) {
+        if(util.isAndroid() && ("olderEntries" == kind || "newerEntries" == kind)) {
+            indicator = Ti.UI.createActivityIndicator({style: Titanium.UI.ActivityIndicatorStyle.BIG});
+            self.add(indicator);
+            indicator.show();
+            Ti.API.info('indicator.show()');
+        }
+//        var style = require("util/style").style;
+//        var util = require("util/util").util;
+        Ti.API.info(util.formatDatetime2(new Date()) + '  loadFeed started.................................');
+        //alert('loadFeed : ' + news + ", kind=" + kind);
+        //alert(news.loadNewsFeed);
+        news.loadNewsFeed(
+            kind, news.newest_item_timestamp, news.oldest_item_timestamp,
+            { //callback
+                success: function(rowsData, newest_item_timestamp, oldest_item_timestamp) {
+                    try {
+                        Ti.API.debug('■■■kind = ' + kind);
+                        Ti.API.debug('■■■newest_item_timestamp = ' + newest_item_timestamp);
+                        Ti.API.debug('■■■oldest_item_timestamp   = ' + oldest_item_timestamp);
+                        
+                        // 読み込み中Row削除
+                        //Ti.API.info("rowsData■" + rowsData);
+                        // 初回ロード時
+                        if("firstTime" == kind) {
+                            /*
+                            if(Ti.App.adType == 1 || Ti.Platform.osname === 'android') {//アイコン
+                                Ti.API.info('★アイコン広告');
+                                adViewContainer.height = 80;
+                                adView.height = 75;
+                                listView.top = 80;
+                            } else if(Ti.App.adType == 2){//バナー
+                                Ti.API.info('★バナー広告');
+                                adViewContainer.height = 50;
+                                adView.height = 50;
+                                listView.top = 50;
+                            }*/
+                            if(rowsData) {
+                                if(util.isAndroid()) {   // リロードボタンの行を１番目に挿入
+                                     rowsData.unshift(
+                                        {
+                                            refreshBtn: {} 
+                                            ,configBtn: {} 
+                                            ,properties: {
+                                                accessoryType: Ti.UI.LIST_ACCESSORY_TYPE_NONE
+                                            }
+                                            ,template: 'refreshTemplate'
+                                        }  
+                                     );
+                                }
+                                Ti.API.info('★rowsData = ' + rowsData);
+                                Ti.API.info('★dataSection = ' + dataSection);
+                                Ti.API.info('★listView = ' + listView);
+                                Ti.API.info('★sections = ' + sections + " (" + sections.length + ")");
+                                Ti.API.info('★sections[0] = ' + sections[0]);
+                                dataSection.setItems(rowsData);
+                                Ti.API.info('★★');
+                                listView.sections = sections;
+                                Ti.API.info('★★★');
+                                listView.setMarker({sectionIndex: 0, itemIndex: (rowsData.length - 1) });
+                                Ti.API.info('★★★★');
+                                self.add(listView);
+                                news.newest_item_timestamp = newest_item_timestamp;
+                                news.oldest_item_timestamp = oldest_item_timestamp;
+                                indicator.hide();
+                            }
+                        }
+                        // 2回目以降の追加ロード時
+                        else if("olderEntries" == kind) {
+                            if(rowsData) {
+                                Ti.API.info(new Date() + ' appendItems start');
+                                dataSection.appendItems(rowsData);
+                                Ti.API.info(new Date() + ' appendItems end');
+                            }
+                            listView.setMarker({sectionIndex: 0, itemIndex: (dataSection.items.length - 1) });
+                        }
+                        // 最新データロード時
+                        else if("newerEntries" == kind) {
+                            if(rowsData) {
+                                if(!listView.sections || listView.sections.length == 0) {    //初回起動時にネットワークエラーが出た場合など
+                                    listView.sections = sections;
+                                }
+                                Ti.API.debug('最新データ読み込み  件数＝' + rowsData.length);
+                                var appendIdx = util.isiPhone()? 0 : 1;
+                                dataSection.insertItemsAt(appendIdx, rowsData);
+                            }
+                        }
+                        else {
+                            Ti.API.error('NewsWindow#loadFeedに渡すkindが不正です。kind=' + kind);
+                        }
+                    } finally {
+                        if(indicator){indicator.hide();}
+                        resetPullHeader();
+                        Ti.API.info(util.formatDatetime2(new Date()) + '  loadFeed finished.................................');
+                    }
+                },
+                fail: function(message) {
+                    if(indicator){indicator.hide();}
+                    var dialog = Ti.UI.createAlertDialog({
+                        message: message,
+                        buttonNames: ['OK']
+                    });
+                    dialog.show();
+                    resetPullHeader();
+                }
+            }
+        );
+    }
+    loadFeed(news, 'firstTime');
+    
+    // self.addEventListener("open", function(e){
+        // Ti.API.info('ウィンドウオープン');
+        // Ti.Android.currentActivity.actionBar.title = "スマートJ for アルビレックス";
+        // Ti.Android.currentActivity.actionBar.hide();
+    // });
+    return self;
 };
 module.exports = NewsWindow;
