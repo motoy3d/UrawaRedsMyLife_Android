@@ -1,0 +1,19 @@
+tiapp.xmlでバージョン更新とSDK更新
+<sdk-version>7.5.0.GA</sdk-version>
+moduleからnend削除
+
+AndroidManifest.xmlでバージョン情報更新
+xmlns:tools="http://schemas.android.com/tools" 
+
+<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="27"/>
+
+〃以下を追加。（効かないが一応）
+	<!-- 勝手に入ってしまうので明示的にremove。 -->
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:node="remove"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="remove"/>
+
+NewsWindow.jsでadView削除
+
+config.jsで　,visitedBgColor : '#457'
+
+tiapp.xmlで <iphone> → <ios>
